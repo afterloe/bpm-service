@@ -1,0 +1,67 @@
+group "cn.cityworks.bpm"
+def artifactId = "demo-1"
+version "0.1-DEV"
+
+apply plugin: "java"
+apply plugin: "org.springframework.boot"
+apply plugin: "jacoco" // 测试覆盖率
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+allprojects {
+    repositories {
+        maven{ url "http://maven.aliyun.com/nexus/content/groups/public/"} // 使用国内maven仓库
+    }
+}
+
+buildscript {
+    repositories {
+        maven{ url "http://maven.aliyun.com/nexus/content/groups/public/"} // 使用国内maven仓库
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.5.3.RELEASE")
+    }
+}
+
+jar {
+    baseName = "$artifactId"
+    version= "$project.version"
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-config:1.3.0.RELEASE"
+    }
+}
+
+// 去除 tomcat 依赖
+configurations {
+    compile.exclude module: "spring-boot-starter-tomcat"
+}
+
+dependencies {
+    compile group: 'com.google.guava', name: 'guava', version: '22.0' // google core java lib
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: '1.5.6.RELEASE' // spring boot core
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-actuator', version: '1.5.6.RELEASE' // spring boot actuator
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-undertow', version: '1.5.6.RELEASE' // undertow web container
+    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-eureka', version: '1.3.2.RELEASE' // spring cloud eureka client
+    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-hystrix', version: '1.3.2.RELEASE' // spring cloud hystrix
+    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-feign', version: '1.3.2.RELEASE' // spring feign client
+    testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: '1.5.6.RELEASE' // spring boot test
+}
+
+// 覆盖率测试 插件配置
+jacoco {
+    toolVersion = "0.7.6.201602180812"
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled false
+        csv.enabled true
+        xml.destination "${buildDir}/jacocoCsv.xml"
+        csv.destination "${buildDir}/jacocoCsv.csv"
+        html.destination "${buildDir}/jacocoHtml"
+    }
+}
