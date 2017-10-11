@@ -1,5 +1,4 @@
 server:
-  port: 8040
   undertow:
     io-threads: 8
     worker-threads: 64
@@ -7,24 +6,16 @@ server:
     buffer-size: 16384
     buffers-per-region: 40
 
-zuul:
-  ignored-services: hystrix-monitor,sleuth-server
-  host:
-    maxTotalConnections: 500
-    maxPerRouteConnections: 45
-  semaphore:
-    max-semaphores: 128
-
 spring:
   application:
-    name: "api-gateway"
+    name: "bpm-demo-1"
   jackson:
     serialization:
       indent_output: true
   http:
     multipart:
-      max-file-size: 2048Mb
-      max-request-size: 2048Mb
+      max-file-size: 20Mb
+      max-request-size: 20Mb
 
 hystrix:
   threadpool:
@@ -45,23 +36,12 @@ feign:
   hystrix:
     enabled: true
 
-filter:
-  userManager:
-    id: reception-center
-    tokenName: access-token
-  whiteList: /${filter.userManager.id}/member/signIn,/${filter.userManager.id}/member/who,/file-system/v1/fs/preview/
-  monitorManager:
-    id: monitor-center
-  format:
-    header: Accept
-    defaultWay: application/json;charset=utf-8
-
 info:
   app:
     name: ${spring.application.name}
     version: v3.0
     time: 2017年9月12日21:55:00
-  describe: "soa api前置网关，负责进行服务访问鉴权，保证各个SOA由外部访问内部的服务组件安全。"
+  describe: "soa bpm 流程代码 测试"
   home: /
   author: afterloe.L
   licensed: MIT Licensed
