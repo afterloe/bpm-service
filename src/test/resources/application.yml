@@ -1,0 +1,76 @@
+datasource:
+  ip: "kini"
+  port: 5432
+  name: "postgres"
+
+server:
+  datasource:
+      driver-class-name: "org.postgresql.Driver"
+      url: jdbc:postgresql://${datasource.ip}:${datasource.port}/${datasource.name}?characterEncoding=UTF-8&useSSL=false
+      type: "com.zaxxer.hikari.HikariDataSource"
+      hikari:
+        max-lifetime: 1830000
+        maximum-pool-size: 18
+      username: "postgres"
+      password: "postgres"
+  jpa:
+    database: postgresql
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+  jackson:
+    serialization:
+      indent_output: true
+  undertow:
+    io-threads: 8
+    worker-threads: 64
+    direct-buffers: true
+    buffer-size: 16384
+    buffers-per-region: 40
+
+spring:
+  application:
+    name: "bpm-demo-1"
+  jackson:
+    serialization:
+      indent_output: true
+  http:
+    multipart:
+      max-file-size: 20Mb
+      max-request-size: 20Mb
+
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 10000
+
+feign:
+  hystrix:
+    enabled: true
+info:
+  app:
+    name: ${spring.application.name}
+    version: v3.0
+    time: 2017年9月12日21:55:00
+  describe: "soa bpm 流程代码 测试"
+  home: /
+  author: afterloe.L
+  licensed: MIT Licensed
+
+developer:
+  name: user
+  password: register
+
+eureka:
+  instance:
+    preferIpAddress: true
+    instance-id: ${spring.cloud.client.ipAddress}:${server.port}
+    nonSecurePort: ${server.port:8080}
+  client:
+    healthcheck:
+      enable: true
+    serviceUrl:
+      defaultZone: http://${developer.name}:${developer.password}@172.19.192.1:8761/eureka/,http://${developer.name}:${developer.password}@172.19.193.1:8761/eureka/,http://${developer.name}:${developer.password}@172.19.194.1:8761/eureka/
