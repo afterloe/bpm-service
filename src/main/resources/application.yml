@@ -1,4 +1,26 @@
+datasource:
+  ip: "kini"
+  port: 5432
+  name: "postgres"
+
 server:
+  datasource:
+      driver-class-name: "org.postgresql.Driver"
+      url: jdbc:postgresql://${datasource.ip}:${datasource.port}/${datasource.name}?characterEncoding=UTF-8&useSSL=false
+      type: "com.zaxxer.hikari.HikariDataSource"
+      hikari:
+        max-lifetime: 1830000
+        maximum-pool-size: 18
+      username: "postgres"
+      password: "postgres"
+  jpa:
+    database: postgresql
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+  jackson:
+    serialization:
+      indent_output: true
   undertow:
     io-threads: 8
     worker-threads: 64
@@ -18,24 +40,16 @@ spring:
       max-request-size: 20Mb
 
 hystrix:
-  threadpool:
-    default:
-      coreSize: 25
   command:
-      default:
-        execution:
-          isolation:
-            thread:
-              timeoutInMilliseconds: 60000
-
-ribbon:
-  ConnectTimeout: 3000
-  ReadTimeout: 60000
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 10000
 
 feign:
   hystrix:
     enabled: true
-
 info:
   app:
     name: ${spring.application.name}
