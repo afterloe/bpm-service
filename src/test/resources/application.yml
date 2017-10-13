@@ -4,21 +4,6 @@ datasource:
   name: "postgres"
 
 spring:
-
-  http:
-    multipart:
-      maxFileSize: 15Mb
-      maxRequestSize: 15Mb
-  jpa:
-    database: postgresql
-    show-sql: true
-    hibernate:
-      ddl-auto: update
-  jackson:
-    serialization:
-      indent_output: true
-
-spring:
   application:
     name: "bpm-demo-1"
   datasource:
