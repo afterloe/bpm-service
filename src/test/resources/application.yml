@@ -3,16 +3,12 @@ datasource:
   port: 5432
   name: "postgres"
 
-server:
-  datasource:
-      driver-class-name: "org.postgresql.Driver"
-      url: jdbc:postgresql://${datasource.ip}:${datasource.port}/${datasource.name}?characterEncoding=UTF-8&useSSL=false
-      type: "com.zaxxer.hikari.HikariDataSource"
-      hikari:
-        max-lifetime: 1830000
-        maximum-pool-size: 18
-      username: "postgres"
-      password: "postgres"
+spring:
+
+  http:
+    multipart:
+      maxFileSize: 15Mb
+      maxRequestSize: 15Mb
   jpa:
     database: postgresql
     show-sql: true
@@ -21,23 +17,31 @@ server:
   jackson:
     serialization:
       indent_output: true
-  undertow:
-    io-threads: 8
-    worker-threads: 64
-    direct-buffers: true
-    buffer-size: 16384
-    buffers-per-region: 40
 
 spring:
   application:
     name: "bpm-demo-1"
+  datasource:
+    driver-class-name: "org.postgresql.Driver"
+    url: jdbc:postgresql://${datasource.ip}:${datasource.port}/${datasource.name}?characterEncoding=UTF-8&useSSL=false
+    type: "com.zaxxer.hikari.HikariDataSource"
+    hikari:
+      max-lifetime: 1830000
+      maximum-pool-size: 18
+    username: "postgres"
+    password: "postgres"
+  http:
+    multipart:
+      maxFileSize: 20Mb
+      maxRequestSize: 20Mb
+  jpa:
+    database: postgresql
+    show-sql: true
+    hibernate:
+      ddl-auto: update
   jackson:
     serialization:
       indent_output: true
-  http:
-    multipart:
-      max-file-size: 20Mb
-      max-request-size: 20Mb
 
 hystrix:
   command:
