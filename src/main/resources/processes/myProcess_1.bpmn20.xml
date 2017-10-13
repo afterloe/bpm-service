@@ -4,7 +4,6 @@
     <startEvent id="_2" name="StartEvent" activiti:initiator="applyUserId">
       <extensionElements>
         <activiti:formProperty id="startDate" name="请假开始日期" type="date" datePattern="yyyy-MM-dd" required="true"></activiti:formProperty>
-        <activiti:formProperty id="startDate1" name="请假开始日期" type="date" datePattern="yyyy-MM-dd" required="true"></activiti:formProperty>
         <activiti:formProperty id="endDate" name="请假结束时间" type="date" datePattern="yyyy-MM-dd" required="true"></activiti:formProperty>
         <activiti:formProperty id="reason" name="请假原因" type="string" required="true"></activiti:formProperty>
       </extensionElements>

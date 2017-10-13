@@ -4,7 +4,7 @@ datasource:
   name: "postgres"
 
 server:
-  port: 8030
+  port: 8080
   undertow:
     direct-buffers: true
 

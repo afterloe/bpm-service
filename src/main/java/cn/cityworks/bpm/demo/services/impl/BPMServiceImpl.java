@@ -1,5 +1,6 @@
 package cn.cityworks.bpm.demo.services.impl;
 
+import cn.cityworks.bpm.demo.exceptions.BasicException;
 import cn.cityworks.bpm.demo.services.BPMService;
 import org.activiti.engine.FormService;
 import org.activiti.engine.form.FormProperty;
@@ -8,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -28,9 +30,17 @@ public class BPMServiceImpl implements BPMService {
     }
 
     @Override
-    public Object startProcess(String processId, Map variables) {
+    public Object startProcess(String processId, Map formData, String access_token) {
         List<FormProperty> items = formService.getStartFormData(processId).getFormProperties();
-        
-        return null;
+        Map<String, String> variables = new HashMap<>();
+        items.stream().forEach(item -> {
+            String key = item.getId();
+            variables.put(key, formData.get(key).toString());
+        });
+        Object data = formService.submitStartFormData(processId, variables);
+        if (null == data) {
+            throw BasicException.build("create task failed!");
+        }
+        return true;
     }
 }

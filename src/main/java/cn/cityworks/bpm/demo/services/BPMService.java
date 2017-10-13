@@ -20,8 +20,8 @@ public interface BPMService extends Serializable{
      * 启动流程
      *
      * @param processId
-     * @param variables
+     * @param formData
      * @return
      */
-    Object startProcess(String processId, Map variables);
+    Object startProcess(String processId, Map formData, String token);
 }
