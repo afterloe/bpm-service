@@ -65,7 +65,7 @@
     </sequenceFlow>
     <sequenceFlow id="_20" sourceRef="_11" targetRef="_18">
       <extensionElements>
-        <activiti:executionListener event="take" expression="${execution.setVariable('result','ok')"/>
+				<activiti:executionListener event="take" expression="${execution.setVariable('result','ok')}"/>
       </extensionElements>
     </sequenceFlow>
     <sequenceFlow id="_10" sourceRef="_7" targetRef="_9"></sequenceFlow>
