@@ -60,7 +60,7 @@ public class LeaveTest {
     }
 
     @Test
-    @Deployment(resources = "processes/myProcess_1.bpmn20.xml")
+    @Deployment(resources = "processes/myProcess_1.bpmn")
     public void allApproved() throws Exception {
         identityService.setAuthenticatedUserId(currentUserId); // 设置发起请假的用户
         ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery()

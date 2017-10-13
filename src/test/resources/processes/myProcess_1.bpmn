@@ -21,7 +21,7 @@
     </userTask>
     <sequenceFlow id="_4" sourceRef="_2" targetRef="_3"></sequenceFlow>
     <exclusiveGateway id="_5" name="ExclusiveGateway"></exclusiveGateway>
-    <userTask id="_7" name="人事审批">
+    <userTask id="_7" name="人事审批" activiti:async="true" activiti:candidateGroups="hr">
       <extensionElements>
         <activiti:formProperty id="startDate" name="请假开始时间" type="date" value="${startDate}" datePattern="yyyy-MM-dd" writable="false"></activiti:formProperty>
         <activiti:formProperty id="endDate" name="请假结束时间" type="date" value="${endDate}" datePattern="yyyy-MM-dd" writable="false"></activiti:formProperty>
