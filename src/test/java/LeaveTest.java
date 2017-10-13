@@ -86,6 +86,7 @@ public class LeaveTest {
            部门领导审批
          */
         Task deptLeaderTask = taskService.createTaskQuery().taskCandidateGroup("deptLeader").singleResult();
+        assertNotNull(deptLeaderTask);
         variables.clear();
         variables.put("deptLeaderApprove", "true");
         formService.submitTaskFormData(deptLeaderTask.getId(), variables);
@@ -94,6 +95,7 @@ public class LeaveTest {
            人事审批
          */
         Task hrTask = taskService.createTaskQuery().taskCandidateGroup("hr").singleResult();
+        assertNotNull(hrTask);
         variables.clear();
         variables.put("hrApprove", "true");
         formService.submitTaskFormData(hrTask.getId(), variables);
@@ -102,6 +104,7 @@ public class LeaveTest {
            销假
          */
         Task reportBackTask = taskService.createTaskQuery().taskAssignee(currentUserId).singleResult();
+        assertNotNull(reportBackTask);
         variables.clear();
         variables.put("reportBackDate", endDate);
         formService.submitTaskFormData(reportBackTask.getId(), variables);
