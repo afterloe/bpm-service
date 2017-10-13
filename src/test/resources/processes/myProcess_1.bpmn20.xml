@@ -21,7 +21,7 @@
     </userTask>
     <sequenceFlow id="_4" sourceRef="_2" targetRef="_3"></sequenceFlow>
     <exclusiveGateway id="_5" name="ExclusiveGateway"></exclusiveGateway>
-    <userTask id="_7" name="人事审批" activiti:async="true" activiti:candidateGroups="hr">
+    <userTask id="_7" name="人事审批" activiti:candidateGroups="hr">
       <extensionElements>
         <activiti:formProperty id="startDate" name="请假开始时间" type="date" value="${startDate}" datePattern="yyyy-MM-dd" writable="false"></activiti:formProperty>
         <activiti:formProperty id="endDate" name="请假结束时间" type="date" value="${endDate}" datePattern="yyyy-MM-dd" writable="false"></activiti:formProperty>
@@ -39,7 +39,7 @@
         <activiti:formProperty id="startDate" name="请假开始时间" type="date" writable="false" value="${startDate}" datePattern="yyyy-MM-dd"></activiti:formProperty>
         <activiti:formProperty id="endDate" name="请假结束时间" type="date" writable="false" value="${endDate}" datePattern="yyyy-MM-dd"></activiti:formProperty>
         <activiti:formProperty id="reason" name="请假原因" type="string" writable="false" value="${reason}"></activiti:formProperty>
-        <activiti:formProperty id="reportBackDate" name="销假日期" type="date" default="${endDate}" datePattern="yyyy-MM-dd"></activiti:formProperty>
+        <activiti:formProperty id="reportBackDate" name="销假日期" type="date" default="${endDate}" datePattern="yyyy-MM-dd" required="true"></activiti:formProperty>
       </extensionElements>
     </userTask>
     <userTask id="_13" name="调整申请">
@@ -63,7 +63,7 @@
     <sequenceFlow id="_8" name="同意" sourceRef="_5" targetRef="_7">
       <conditionExpression xsi:type="tFormalExpression"><![CDATA[${deptLeaderApprove=='true'}]]></conditionExpression>
     </sequenceFlow>
-    <sequenceFlow id="_20" sourceRef="_11" targetRef="_18">
+    <sequenceFlow id="_20" name="销假" sourceRef="_11" targetRef="_18">
       <extensionElements>
 				<activiti:executionListener event="take" expression="${execution.setVariable('result','ok')}"/>
       </extensionElements>

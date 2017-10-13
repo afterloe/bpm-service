@@ -107,6 +107,7 @@ public class LeaveTest {
         assertNotNull(reportBackTask);
         variables.clear();
         variables.put("reportBackDate", endDate);
+        variables.put("result", "ok");
         formService.submitTaskFormData(reportBackTask.getId(), variables);
 
         /*
