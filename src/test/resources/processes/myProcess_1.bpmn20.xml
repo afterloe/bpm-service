@@ -15,7 +15,7 @@
         <activiti:formProperty id="reason" name="请假原因" type="string" value="${reason}" writable="false"></activiti:formProperty>
         <activiti:formProperty id="deptLeaderApprove" name="部门主管审批意见" type="enum" required="true">
           <activiti:value id="true" name="同意"></activiti:value>
-          <activiti:value id="true" name="拒绝"></activiti:value>
+          <activiti:value id="false" name="拒绝"></activiti:value>
         </activiti:formProperty>
       </extensionElements>
     </userTask>
@@ -34,11 +34,11 @@
       </extensionElements>
     </userTask>
     <exclusiveGateway id="_9" name="ExclusiveGateway"></exclusiveGateway>
-    <userTask id="_11" name="销假">
+    <userTask id="_11" name="销假" activiti:assignee="${applyUserId}">
       <extensionElements>
-        <activiti:formProperty id="startDate" name="请假开始时间" type="date" value="${startDate}" datePattern="yyyy-MM-dd"></activiti:formProperty>
-        <activiti:formProperty id="endDate" name="请假结束时间" type="date" value="${endDate}" datePattern="yyyy-MM-dd"></activiti:formProperty>
-        <activiti:formProperty id="reason" name="请假原因" type="string" value="${reason}"></activiti:formProperty>
+        <activiti:formProperty id="startDate" name="请假开始时间" type="date" writable="false" value="${startDate}" datePattern="yyyy-MM-dd"></activiti:formProperty>
+        <activiti:formProperty id="endDate" name="请假结束时间" type="date" writable="false" value="${endDate}" datePattern="yyyy-MM-dd"></activiti:formProperty>
+        <activiti:formProperty id="reason" name="请假原因" type="string" writable="false" value="${reason}"></activiti:formProperty>
         <activiti:formProperty id="reportBackDate" name="销假日期" type="date" default="${endDate}" datePattern="yyyy-MM-dd"></activiti:formProperty>
       </extensionElements>
     </userTask>
