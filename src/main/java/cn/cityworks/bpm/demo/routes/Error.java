@@ -3,6 +3,7 @@ package cn.cityworks.bpm.demo.routes;
 import cn.cityworks.bpm.demo.domain.ResponseDTO;
 import cn.cityworks.bpm.demo.exceptions.BasicException;
 import com.netflix.hystrix.exception.HystrixTimeoutException;
+import org.activiti.engine.ActivitiException;
 import org.springframework.boot.autoconfigure.web.ErrorController;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -36,6 +37,12 @@ public class Error implements ErrorController, Serializable {
     public ResponseDTO handleException(Exception e) {
         e.printStackTrace();
         return ResponseDTO.build(null, 500,"system is busy");
+    }
+
+    @ExceptionHandler(ActivitiException.class)
+    public ResponseDTO handleActivitiException(Exception e) {
+        e.printStackTrace();
+        return ResponseDTO.build(null, 500,"bpm process engine find error.");
     }
 
     @ExceptionHandler(ResourceAccessException.class)
