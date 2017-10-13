@@ -3,6 +3,11 @@ datasource:
   port: 5432
   name: "postgres"
 
+server:
+  port: 8030
+  undertow:
+    direct-buffers: true
+
 spring:
   application:
     name: "bpm-demo-1"
