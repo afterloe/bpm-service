@@ -2,7 +2,6 @@ package cn.cityworks.bpm.demo.routes.v1;
 
 import cn.cityworks.bpm.demo.domain.ResponseDTO;
 import cn.cityworks.bpm.demo.services.BPMService;
-import org.activiti.engine.RepositoryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +9,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.Serializable;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -18,7 +16,7 @@ import java.util.Optional;
  * create by afterloe on 2017/10/13
  */
 @RestController
-@RequestMapping("/v1/bpm")
+@RequestMapping("/v1/daPeng")
 public class DaPengBPM implements Serializable {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DaPengBPM.class);
