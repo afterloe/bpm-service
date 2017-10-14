@@ -39,10 +39,18 @@ public class AiaUserManagerImpl extends UserEntityManager {
         throw new RuntimeException("not implement method.");
     }
 
-    private UserEntity toActivitiUser(User user){
-        if (user == null){
-            return null;
-        }
+    private UserEntity toActivitiUser(){
+//        User user
+//        if (user == null){
+//            return null;
+//        }
+//        UserEntity userEntity = new UserEntity();
+//        userEntity.setId(user.getLoginName());
+//        userEntity.setFirstName(user.getName());
+//        userEntity.setLastName(StringUtils.EMPTY);
+//        userEntity.setPassword(user.getPassword());
+//        userEntity.setEmail(user.getEmail());
+//        userEntity.setRevision(1);
         throw new RuntimeException("not implement method.");
     }
 
