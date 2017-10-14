@@ -39,5 +39,14 @@ public interface BPMService extends Serializable{
      * @param taskId
      * @return
      */
-    Object taskInfo(String taskId);
+    Object getTaskForm(String taskId);
+
+    /**
+     * 完成任务
+     *
+     * @param token
+     * @param formData
+     * @return
+     */
+    Object completeTask(String token, Map formData);
 }

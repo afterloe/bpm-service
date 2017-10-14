@@ -27,6 +27,20 @@ public class DaPengBPM implements Serializable {
     private String processId;
 
     /**
+     * 完成任务
+     *
+     * @param taskForm
+     * @param access_token
+     * @return
+     */
+    @RequestMapping(value = {"task/{taskId}", "task"}, method = RequestMethod.PUT)
+    public ResponseDTO completeTask(@RequestParam Map<String, String> taskForm
+            , @RequestHeader("access-token") String access_token) {
+        Object data = bpmService.completeTask(access_token, taskForm);
+        return ResponseDTO.build(data);
+    }
+
+    /**
      * 任务详情
      *
      * @param taskId_Path
@@ -34,10 +48,10 @@ public class DaPengBPM implements Serializable {
      * @return
      */
     @RequestMapping(value = {"task/{taskId}", "task"}, method = RequestMethod.GET)
-    public ResponseDTO taskInfo(
+    public ResponseDTO getTaskForm(
             @PathVariable(value = "taskId", required = false) String taskId_Path,
             @RequestParam(value = "taskId", required =false) String taskId) {
-        Object data = bpmService.taskInfo(Optional.ofNullable(taskId_Path).orElse(taskId));
+        Object data = bpmService.getTaskForm(Optional.ofNullable(taskId_Path).orElse(taskId));
         return ResponseDTO.build(data);
     }
 
@@ -71,9 +85,9 @@ public class DaPengBPM implements Serializable {
      * @return
      */
     @RequestMapping(value = "postItem", method = RequestMethod.POST)
-    public ResponseDTO startProcess(@RequestParam Map<String, String> subSystem
+    public ResponseDTO startProcess(@RequestParam Map<String, String> taskForm
         , @RequestHeader("access-token") String access_token) {
-        Object data = bpmService.startProcess(processId, subSystem, access_token);
+        Object data = bpmService.startProcess(processId, taskForm, access_token);
         return ResponseDTO.build(data);
     }
 }

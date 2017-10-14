@@ -38,7 +38,11 @@ public class BPMServiceImpl implements BPMService {
 
     @Override
     public Object startProcess(String processId, Map formData, String access_token) {
-        List<FormProperty> items = formService.getStartFormData(processId).getFormProperties();
+        TaskFormData taskFormData = formService.getTaskFormData(processId);
+        if (null == taskFormData) {
+            throw BasicException.build("no such this task!.", HttpStatus.NOT_FOUND.value());
+        }
+        List<FormProperty> items = taskFormData.getFormProperties();
         Map<String, String> variables = new HashMap<>();
         FormProperty lackParameter = items.stream()
                 .filter(item -> item.isRequired() && !formData.containsKey(item.getId()))
@@ -48,7 +52,7 @@ public class BPMServiceImpl implements BPMService {
             throw BasicException.build("lack parameter -> " + lackParameter.getId(),
                     HttpStatus.BAD_REQUEST.value());
         }
-        items.stream().forEach(item -> {
+        items.stream().filter(FormProperty::isWritable).forEach(item -> {
             String key = item.getId();
             variables.put(key, formData.get(key).toString());
         });
@@ -72,8 +76,36 @@ public class BPMServiceImpl implements BPMService {
     }
 
     @Override
-    public Object taskInfo(String taskId) {
+    public Object getTaskForm(String taskId) {
         TaskFormData data = formService.getTaskFormData(taskId);
         return data.getFormProperties();
+    }
+
+    @Override
+    public Object completeTask(String token, Map formData) {
+        if (!formData.containsKey("taskId")) {
+            throw BasicException.build("Lack parameter -> taskId", HttpStatus.BAD_REQUEST.value());
+        }
+        String taskId = formData.get("taskId").toString();
+        TaskFormData taskFormData = formService.getTaskFormData(taskId);
+        if (null == taskFormData) {
+            throw BasicException.build("no such this task!.", HttpStatus.NOT_FOUND.value());
+        }
+        List<FormProperty> items = taskFormData.getFormProperties();
+        Map<String, String> variables = new HashMap<>();
+        FormProperty lackParameter = items.stream()
+                .filter(item -> item.isRequired() && !formData.containsKey(item.getId()))
+                .findAny()
+                .orElse(null);
+        if (null != lackParameter) {
+            throw BasicException.build("lack parameter -> " + lackParameter.getId(),
+                    HttpStatus.BAD_REQUEST.value());
+        }
+        items.stream().filter(FormProperty::isWritable).forEach(item -> {
+            String key = item.getId();
+            variables.put(key, formData.get(key).toString());
+        });
+        formService.submitTaskFormData(taskId, variables);
+        return true;
     }
 }
