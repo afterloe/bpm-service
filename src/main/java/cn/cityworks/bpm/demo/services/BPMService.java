@@ -24,4 +24,12 @@ public interface BPMService extends Serializable{
      * @return
      */
     Object startProcess(String processId, Map formData, String token);
+
+    /**
+     * 获取待办事件列表
+     *
+     * @param token
+     * @return
+     */
+    Object listTask(String token);
 }

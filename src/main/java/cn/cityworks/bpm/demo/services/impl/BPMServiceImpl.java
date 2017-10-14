@@ -3,7 +3,9 @@ package cn.cityworks.bpm.demo.services.impl;
 import cn.cityworks.bpm.demo.exceptions.BasicException;
 import cn.cityworks.bpm.demo.services.BPMService;
 import org.activiti.engine.FormService;
+import org.activiti.engine.TaskService;
 import org.activiti.engine.form.FormProperty;
+import org.activiti.engine.task.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +27,8 @@ public class BPMServiceImpl implements BPMService {
 
     @Autowired
     private FormService formService;
+    @Autowired
+    private TaskService taskService;
 
     @Override
     public Object getProcessFormDataByStart(String processId) {
@@ -52,5 +56,17 @@ public class BPMServiceImpl implements BPMService {
             throw BasicException.build("create task failed!");
         }
         return true;
+    }
+
+    @Override
+    public Object listTask(String token) {
+        Map<String, List<Task>> listTask = new HashMap<>();
+        // 获取 直接分配给当前人或已签收的任务
+        List<Task> doingTaskList = taskService.createTaskQuery().taskAssignee(token).list();
+        // 等待签收的任务
+        List<Task> waitingClaimTaskList = taskService.createTaskQuery().taskCandidateUser(token).list();
+        listTask.put("doingTaskList", doingTaskList);
+        listTask.put("waitingClaimTaskList", waitingClaimTaskList);
+        return listTask;
     }
 }

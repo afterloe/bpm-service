@@ -26,12 +26,22 @@ public class DaPengBPM implements Serializable {
     private String processId;
 
     /**
-     * 获取待办事项表单数据
+     * 获取待办事项
+     *
+     * @return
+     */
+    public ResponseDTO listTask(@RequestHeader("access-token") String access_token) {
+        Object data = bpmService.listTask(access_token);
+        return ResponseDTO.build(data);
+    }
+
+    /**
+     * 获取事件表单类型列表
      *
      * @return
      */
     @RequestMapping(value = "postItem", method = RequestMethod.GET)
-    public ResponseDTO listTask() {
+    public ResponseDTO listTaskFormData() {
         Object data = bpmService.getProcessFormDataByStart(processId);
         return ResponseDTO.build(data);
     }
@@ -43,7 +53,7 @@ public class DaPengBPM implements Serializable {
      */
     @RequestMapping(value = "postItem", method = RequestMethod.POST)
     public ResponseDTO startProcess(@RequestParam Map<String, String> subSystem
-        ,@RequestHeader("access-token") String access_token) {
+        , @RequestHeader("access-token") String access_token) {
         Object data = bpmService.startProcess(processId, subSystem, access_token);
         return ResponseDTO.build(data);
     }
