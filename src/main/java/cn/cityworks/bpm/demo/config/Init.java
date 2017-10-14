@@ -1,15 +1,12 @@
 package cn.cityworks.bpm.demo.config;
 
-import java.io.Serializable;
-import java.text.SimpleDateFormat;
-
-import cn.cityworks.bpm.demo.dao.impl.AiaUserManagerImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.activiti.engine.IdentityService;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
+
+import java.io.Serializable;
+import java.text.SimpleDateFormat;
 
 /**
  * create by afterloe on 2017/10/13
@@ -23,11 +20,5 @@ public class Init implements Serializable {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
         return objectMapper;
-    }
-
-    @Bean
-    private IdentityService usersAndGroupsInitializer() {
-        AiaUserManagerImpl aiaUserManager = new AiaUserManagerImpl();
-        return aiaUserManager;
     }
 }
