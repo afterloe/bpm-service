@@ -5,6 +5,7 @@ import cn.cityworks.bpm.demo.services.BPMService;
 import org.activiti.engine.FormService;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.form.FormProperty;
+import org.activiti.engine.form.TaskFormData;
 import org.activiti.engine.task.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -68,5 +69,11 @@ public class BPMServiceImpl implements BPMService {
         listTask.put("doingTaskList", doingTaskList);
         listTask.put("waitingClaimTaskList", waitingClaimTaskList);
         return listTask;
+    }
+
+    @Override
+    public Object taskInfo(String taskId) {
+        TaskFormData data = formService.getTaskFormData(taskId);
+        return data.getFormProperties();
     }
 }

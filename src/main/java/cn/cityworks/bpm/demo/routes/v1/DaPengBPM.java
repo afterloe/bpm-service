@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.Serializable;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * create by afterloe on 2017/10/13
@@ -26,11 +27,29 @@ public class DaPengBPM implements Serializable {
     private String processId;
 
     /**
-     * 获取待办事项
+     * 任务详情
+     *
+     * @param taskId_Path
+     * @param taskId
+     * @return
+     */
+    @RequestMapping(value = {"task/{taskId}", "task"}, method = RequestMethod.GET)
+    public ResponseDTO taskInfo(
+            @PathVariable(value = "taskId", required = false) String taskId_Path,
+            @RequestParam(value = "taskId", required =false) String taskId) {
+        Object data = bpmService.taskInfo(Optional.ofNullable(taskId_Path).orElse(taskId));
+        return ResponseDTO.build(data);
+    }
+
+    /**
+     * 获取待办事项列表
      *
      * @return
      */
-    public ResponseDTO listTask(@RequestHeader("access-token") String access_token) {
+    @RequestMapping(value = "taskList", method = RequestMethod.GET)
+    public ResponseDTO listTask(@RequestHeader("access-token") String access_token
+            , @RequestParam(value = "page", required = false, defaultValue = "0") int page
+            , @RequestParam(value = "number", required = false, defaultValue = "50") int number) {
         Object data = bpmService.listTask(access_token);
         return ResponseDTO.build(data);
     }

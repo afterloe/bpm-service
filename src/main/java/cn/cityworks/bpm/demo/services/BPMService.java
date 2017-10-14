@@ -32,4 +32,12 @@ public interface BPMService extends Serializable{
      * @return
      */
     Object listTask(String token);
+
+    /**
+     * 查看任务详情
+     *
+     * @param taskId
+     * @return
+     */
+    Object taskInfo(String taskId);
 }
