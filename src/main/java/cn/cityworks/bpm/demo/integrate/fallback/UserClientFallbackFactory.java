@@ -44,9 +44,28 @@ public class UserClientFallbackFactory implements FallbackFactory<UserClient>, S
         responseObjectDTO.put("msg", "UserClient is not available");
 
         return fallback = new UserClient() {
+
             @Override
             public Map users() {
                 LOGGER.error("users() invoke fail");
+                return responseObjectDTO;
+            }
+
+            @Override
+            public Map listGroupsByName(String groupName, int page, int number) {
+                LOGGER.error("groupsByName({}, {}, {}) invoke fail", groupName, page, number);
+                return responseObjectDTO;
+            }
+
+            @Override
+            public Map getGroups(String groupId) {
+                LOGGER.error("getGroups({}) invoke fail", groupId);
+                return responseObjectDTO;
+            }
+
+            @Override
+            public Map listGroups(int page, int number) {
+                LOGGER.error("listGroups({}, {}) invoke fail", page, number);
                 return responseObjectDTO;
             }
         };
