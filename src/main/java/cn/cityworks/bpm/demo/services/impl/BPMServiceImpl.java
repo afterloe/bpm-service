@@ -101,9 +101,8 @@ public class BPMServiceImpl implements BPMService {
             repo.put("assignee", task.getAssignee());
             repo.put("createTime", task.getCreateTime());
             repo.put("description", task.getDescription());
-            repo.put("localVariables", task.getTaskLocalVariables());
             repo.put("owner", task.getOwner());
-            repo.put("processVariables", task.getProcessVariables());
+            repo.put("formDate", formService.getTaskFormData(task.getId()).getFormProperties());
             return repo;
         }).collect(toList());
     }
