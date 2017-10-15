@@ -21,8 +21,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
+import static java.util.stream.Collectors.toList;
 
 /**
  * create by afterloe on 2017/10/13
@@ -82,15 +85,27 @@ public class BPMServiceImpl implements BPMService {
     }
 
     @Override
-    public Object listTask(String token) {
+    public Object listTask(String access_token) {
+        ResponseDTO<UserVO> response = receptionCenterClient.who(access_token);
+        if (200 != response.getCode()) {
+            throw BasicException.build(response.getMsg(), response.getCode());
+        }
         Map<String, List<Task>> listTask = new HashMap<>();
         // 获取 直接分配给当前人或已签收的任务
-        List<Task> doingTaskList = taskService.createTaskQuery().taskAssignee(token).list();
-        // 等待签收的任务
-        List<Task> waitingClaimTaskList = taskService.createTaskQuery().taskCandidateUser(token).list();
-        listTask.put("doingTaskList", doingTaskList);
-        listTask.put("waitingClaimTaskList", waitingClaimTaskList);
-        return listTask;
+        List<Task> doingTaskList = taskService.createTaskQuery().taskCandidateGroup("区级河长").list();
+        return doingTaskList.stream().map(task -> {
+            Map repo = new LinkedHashMap();
+            repo.put("name", task.getName());
+            repo.put("id", task.getId());
+            repo.put("processInstanceId", task.getProcessInstanceId());
+            repo.put("assignee", task.getAssignee());
+            repo.put("createTime", task.getCreateTime());
+            repo.put("description", task.getDescription());
+            repo.put("localVariables", task.getTaskLocalVariables());
+            repo.put("owner", task.getOwner());
+            repo.put("processVariables", task.getProcessVariables());
+            return repo;
+        }).collect(toList());
     }
 
     @Override

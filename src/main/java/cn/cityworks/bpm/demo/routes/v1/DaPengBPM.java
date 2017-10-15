@@ -53,6 +53,19 @@ public class DaPengBPM implements Serializable {
     }
 
     /**
+     * 获取待办事项列表
+     *
+     * @return
+     */
+    @RequestMapping(value = "taskList", method = RequestMethod.GET)
+    public ResponseDTO listTask(@RequestHeader("access-token") String access_token
+            , @RequestParam(value = "page", required = false, defaultValue = "0") int page
+            , @RequestParam(value = "number", required = false, defaultValue = "50") int number) {
+        Object data = bpmService.listTask(access_token);
+        return ResponseDTO.build(data);
+    }
+
+    /**
      * 完成任务
      *
      * @param taskForm
@@ -78,19 +91,6 @@ public class DaPengBPM implements Serializable {
             @PathVariable(value = "taskId", required = false) String taskId_Path,
             @RequestParam(value = "taskId", required =false) String taskId) {
         Object data = bpmService.getTaskForm(Optional.ofNullable(taskId_Path).orElse(taskId));
-        return ResponseDTO.build(data);
-    }
-
-    /**
-     * 获取待办事项列表
-     *
-     * @return
-     */
-    @RequestMapping(value = "taskList", method = RequestMethod.GET)
-    public ResponseDTO listTask(@RequestHeader("access-token") String access_token
-            , @RequestParam(value = "page", required = false, defaultValue = "0") int page
-            , @RequestParam(value = "number", required = false, defaultValue = "50") int number) {
-        Object data = bpmService.listTask(access_token);
         return ResponseDTO.build(data);
     }
 }
