@@ -4,6 +4,7 @@ import cn.cityworks.bpm.demo.domain.ResponseDTO;
 import cn.cityworks.bpm.demo.domain.UserVO;
 import cn.cityworks.bpm.demo.exceptions.BasicException;
 import cn.cityworks.bpm.demo.integrate.ReceptionCenterClient;
+import cn.cityworks.bpm.demo.integrate.UserClient;
 import cn.cityworks.bpm.demo.services.BPMService;
 import org.activiti.engine.FormService;
 import org.activiti.engine.IdentityService;
@@ -45,6 +46,8 @@ public class BPMServiceImpl implements BPMService {
     private ReceptionCenterClient receptionCenterClient;
     @Autowired
     private RepositoryService repositoryService;
+    @Autowired
+    private UserClient userClient;
 
     @Override
     public Object getFromDataList(String processId) {
@@ -96,20 +99,31 @@ public class BPMServiceImpl implements BPMService {
         if (200 != response.getCode()) {
             throw BasicException.build(response.getMsg(), response.getCode());
         }
-        // 获取 直接分配给当前人或已签收的任务
-        List<Task> doingTaskList = taskService.createTaskQuery().taskCandidateGroup("区级河长").list();
-        return doingTaskList.stream().map(task -> {
-            Map repo = new LinkedHashMap();
-            repo.put("name", task.getName());
-            repo.put("id", task.getId());
-            repo.put("processInstanceId", task.getProcessInstanceId());
-            repo.put("assignee", task.getAssignee());
-            repo.put("createTime", task.getCreateTime());
-            repo.put("description", task.getDescription());
-            repo.put("owner", task.getOwner());
-            repo.put("formDate", getTaskSummary(task.getId()));
-            return repo;
-        }).collect(toList());
+        Map result = userClient.listGroupsByUserId(response.getData().getId(), 0, 200);
+        if (HttpStatus.SC_OK != Integer.valueOf(result.get("code").toString())) {
+            throw BasicException.build("can't find any groups info", HttpStatus.SC_INTERNAL_SERVER_ERROR);
+        }
+        Map data = (Map) result.get("data");
+        List<Map> groups = (List) data.get("content");
+        // 获取 所在组内的所有任务列表
+        groups.stream().forEach(group -> {
+            List<Task> doingTaskList = taskService.createTaskQuery()
+                    .taskCandidateGroup(group.get("groupName").toString()).list();
+            group.put("toDo", doingTaskList.stream().map(task -> {
+                Map repo = new LinkedHashMap();
+                repo.put("name", task.getName());
+                repo.put("id", task.getId());
+                repo.put("processInstanceId", task.getProcessInstanceId());
+                repo.put("assignee", task.getAssignee());
+                repo.put("createTime", task.getCreateTime());
+                repo.put("description", task.getDescription());
+                repo.put("owner", task.getOwner());
+                repo.put("formDate", getTaskSummary(task.getId()));
+                return repo;
+            }).collect(toList()));
+        });
+
+        return groups;
     }
 
     @Override

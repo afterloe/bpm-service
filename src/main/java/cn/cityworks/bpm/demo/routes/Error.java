@@ -4,6 +4,7 @@ import cn.cityworks.bpm.demo.domain.ResponseDTO;
 import cn.cityworks.bpm.demo.exceptions.BasicException;
 import com.netflix.hystrix.exception.HystrixTimeoutException;
 import org.activiti.engine.ActivitiException;
+import org.activiti.engine.ActivitiObjectNotFoundException;
 import org.springframework.boot.autoconfigure.web.ErrorController;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.ServletRequestBindingException;
@@ -59,6 +60,11 @@ public class Error implements ErrorController, Serializable {
     @ExceptionHandler(ServletRequestBindingException.class)
     public ResponseDTO handleServletRequestBindingException(Exception e) {
         return ResponseDTO.build(null, 400, "lack header");
+    }
+
+    @ExceptionHandler(ActivitiObjectNotFoundException.class)
+    public ResponseDTO handleActivitiObjectNotFoundException(Exception e) {
+        return ResponseDTO.build(null, 404, "task not found");
     }
 
     @ExceptionHandler(IOException.class)
