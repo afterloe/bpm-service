@@ -76,6 +76,31 @@ public class AiaUserManagerImpl extends UserEntityManager {
         return value;
     }
 
+    private List<Group> transformationToGroup(Map result) {
+        if (HttpStatus.SC_OK != Integer.valueOf(result.get("code").toString())) {
+            return Lists.newArrayList();
+        }
+        Map data = (Map) result.get("data");
+        if (data.containsKey("content")) {
+            List<Map> content = (List) data.get("content");
+            return content.stream().map(obj -> {
+                GroupEntity group = new GroupEntity();
+                group.setId(obj.get("id").toString());
+                group.setName(obj.get("groupName").toString());
+                group.setType(obj.get("active").toString());
+                group.setRevision(1);
+                return group;
+            }).collect(toList());
+        }
+        GroupEntity group = new GroupEntity();
+        group.setId(data.get("id").toString());
+        group.setName(data.get("groupName").toString());
+        group.setType(data.get("active").toString());
+        group.setRevision(1);
+
+        return Lists.newArrayList(group);
+    }
+
     private List<User> transformation(Map result) {
         if (HttpStatus.SC_OK != Integer.valueOf(result.get("code").toString())) {
             return Lists.newArrayList();
@@ -135,12 +160,8 @@ public class AiaUserManagerImpl extends UserEntityManager {
     }
 
     public List<Group> findGroupsByUser(String userId) {
-//      return getDbSqlSession().selectList("selectGroupsByUserId", userId);
-        throw new RuntimeException("not implement method.");
-    }
-
-    private GroupEntity toActivitiGroup(){
-        throw new RuntimeException("not implement method.");
+        Integer size = null, pageNumber = null;
+        return transformationToGroup(userClient.listGroupsByUserId(userId, pageNumber, size));
     }
 
     public UserQuery createNewUserQuery() {
@@ -149,45 +170,30 @@ public class AiaUserManagerImpl extends UserEntityManager {
     }
 
     public IdentityInfoEntity findUserInfoByUserIdAndKey(String userId, String key) {
-//      Map<String, String> parameters = new HashMap<String, String>();
-//      parameters.put("userId", userId);
-//      parameters.put("key", key);
-//      return (IdentityInfoEntity) getDbSqlSession().selectOne("selectIdentityInfoByUserIdAndKey", parameters);
-        throw new RuntimeException("not implement method.");
+        Map result = userClient.getUserById(userId);
+        IdentityInfoEntity identityInfoEntity = new IdentityInfoEntity();
+        identityInfoEntity.setUserId(userId);
+        identityInfoEntity.setDetails((Map<String, String>) result.get("data"));
+        return identityInfoEntity;
     }
 
     public List<String> findUserInfoKeysByUserIdAndType(String userId, String type) {
-//      Map<String, String> parameters = new HashMap<String, String>();
-//      parameters.put("userId", userId);
-//      parameters.put("type", type);
-//      return (List) getDbSqlSession().getSqlSession().selectList("selectIdentityInfoKeysByUserIdAndType", parameters);
         throw new RuntimeException("not implement method.");
     }
 
     public Boolean checkPassword(String userId, String password) {
-//      User user = findUserById(userId);
-//      if ((user != null) && (password != null) && (password.equals(user.getPassword()))) {
-//          return true;
-//      }
-//      return false;
         throw new RuntimeException("not implement method.");
     }
 
     public List<User> findPotentialStarterUsers(String proceDefId) {
-//      Map<String, String> parameters = new HashMap<String, String>();
-//      parameters.put("procDefId", proceDefId);
-//      return (List<User>) getDbSqlSession().selectOne("selectUserByQueryCriteria", parameters);
         throw new RuntimeException("not implement method.");
-
     }
 
     public List<User> findUsersByNativeQuery(Map<String, Object> parameterMap, int firstResult, int maxResults) {
-//      return getDbSqlSession().selectListWithRawParameter("selectUserByNativeQuery", parameterMap, firstResult, maxResults);
         throw new RuntimeException("not implement method.");
     }
 
     public long findUserCountByNativeQuery(Map<String, Object> parameterMap) {
-//      return (Long) getDbSqlSession().selectOne("selectUserCountByNativeQuery", parameterMap);
         throw new RuntimeException("not implement method.");
     }
 }
