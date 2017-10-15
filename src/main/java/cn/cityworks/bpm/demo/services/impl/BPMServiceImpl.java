@@ -11,9 +11,9 @@ import org.activiti.engine.IdentityService;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.form.FormProperty;
+import org.activiti.engine.form.FormType;
 import org.activiti.engine.form.StartFormData;
 import org.activiti.engine.form.TaskFormData;
-import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.task.Task;
 import org.apache.http.HttpStatus;
 import org.slf4j.Logger;
@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 import static java.util.stream.Collectors.toList;
 
@@ -49,9 +50,28 @@ public class BPMServiceImpl implements BPMService {
     @Autowired
     private UserClient userClient;
 
+    Function<FormProperty, Map> handlerFormProperty = item -> {
+        Map value = new LinkedHashMap();
+        value.put("id", item.getId());
+        value.put("name", item.getName());
+        FormType type = item.getType();
+        Map typeInfo = new LinkedHashMap();
+        typeInfo.put("name", type.getName());
+        if (type.getName().equals("enum")) {
+            typeInfo.put("values", type.getInformation("values"));
+        }
+        value.put("type", typeInfo);
+        value.put("value", item.getValue());
+        value.put("required", item.isRequired());
+        value.put("readable", item.isReadable());
+        value.put("writable", item.isWritable());
+        return value;
+    };
+
     @Override
     public Object getFromDataList(String processId) {
-        return formService.getStartFormData(processId).getFormProperties();
+        return formService.getStartFormData(processId).getFormProperties().stream()
+                .map(handlerFormProperty).collect(toList());
     }
 
     @Override
@@ -60,7 +80,6 @@ public class BPMServiceImpl implements BPMService {
         if (200 != response.getCode()) {
             throw BasicException.build(response.getMsg(), response.getCode());
         }
-
         StartFormData taskFormData = formService.getStartFormData(processId);
         if (null == taskFormData) {
             throw BasicException.build("no such this process!.", HttpStatus.SC_NOT_FOUND);
@@ -129,7 +148,7 @@ public class BPMServiceImpl implements BPMService {
     @Override
     public Object getTaskForm(String taskId) {
         TaskFormData data = formService.getTaskFormData(taskId);
-        return data.getFormProperties();
+        return data.getFormProperties().stream().map(handlerFormProperty).collect(toList());
     }
 
     @Override
