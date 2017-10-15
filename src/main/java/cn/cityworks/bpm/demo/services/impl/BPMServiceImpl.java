@@ -96,7 +96,6 @@ public class BPMServiceImpl implements BPMService {
         if (200 != response.getCode()) {
             throw BasicException.build(response.getMsg(), response.getCode());
         }
-        Map<String, List<Task>> listTask = new HashMap<>();
         // 获取 直接分配给当前人或已签收的任务
         List<Task> doingTaskList = taskService.createTaskQuery().taskCandidateGroup("区级河长").list();
         return doingTaskList.stream().map(task -> {
@@ -120,15 +119,19 @@ public class BPMServiceImpl implements BPMService {
     }
 
     @Override
-    public Object completeTask(String token, Map formData) {
-        if (!formData.containsKey("taskId")) {
-            throw BasicException.build("Lack parameter -> taskId", HttpStatus.SC_BAD_REQUEST);
+    public Object completeTask(String access_token, String taskId, Map formData) {
+        Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+        if (null == task) {
+            throw BasicException.build("no such this task", HttpStatus.SC_NOT_FOUND);
         }
-        String taskId = formData.get("taskId").toString();
+        ResponseDTO<UserVO> response = receptionCenterClient.who(access_token);
+        if (200 != response.getCode()) {
+            throw BasicException.build(response.getMsg(), response.getCode());
+        }
+        if (null == task.getAssignee()) {
+            taskService.claim(taskId, response.getData().getId());
+        }
         TaskFormData taskFormData = formService.getTaskFormData(taskId);
-        if (null == taskFormData) {
-            throw BasicException.build("no such this task!.", HttpStatus.SC_NOT_FOUND);
-        }
         List<FormProperty> items = taskFormData.getFormProperties();
         Map<String, String> variables = new HashMap<>();
         FormProperty lackParameter = items.stream()

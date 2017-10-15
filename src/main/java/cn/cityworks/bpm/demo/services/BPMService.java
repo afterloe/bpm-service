@@ -48,5 +48,5 @@ public interface BPMService extends Serializable{
      * @param formData
      * @return
      */
-    Object completeTask(String token, Map formData);
+    Object completeTask(String token, String taskId, Map formData);
 }

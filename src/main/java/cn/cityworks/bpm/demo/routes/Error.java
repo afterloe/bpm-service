@@ -6,6 +6,7 @@ import com.netflix.hystrix.exception.HystrixTimeoutException;
 import org.activiti.engine.ActivitiException;
 import org.springframework.boot.autoconfigure.web.ErrorController;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.bind.ServletRequestBindingException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -52,13 +53,18 @@ public class Error implements ErrorController, Serializable {
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public ResponseDTO handleMethodNotSupportedException(Exception e) {
-        return ResponseDTO.build(null, 400,e.getMessage());
+        return ResponseDTO.build(null, 400, e.getMessage());
+    }
+
+    @ExceptionHandler(ServletRequestBindingException.class)
+    public ResponseDTO handleServletRequestBindingException(Exception e) {
+        return ResponseDTO.build(null, 400, "lack header");
     }
 
     @ExceptionHandler(IOException.class)
     public ResponseDTO handleIOException(Exception e) {
         e.printStackTrace();
-        return ResponseDTO.build(null, 400,e.getMessage());
+        return ResponseDTO.build(null, 400, e.getMessage());
     }
 
     @ExceptionHandler(HystrixTimeoutException.class)

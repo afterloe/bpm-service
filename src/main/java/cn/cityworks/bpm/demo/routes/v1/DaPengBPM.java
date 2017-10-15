@@ -73,9 +73,10 @@ public class DaPengBPM implements Serializable {
      * @return
      */
     @RequestMapping(value = {"task/{taskId}", "task"}, method = RequestMethod.PUT)
-    public ResponseDTO completeTask(@RequestParam Map<String, String> taskForm
+    public ResponseDTO completeTask(@PathVariable(value = "taskId", required = false) String taskId
+            , @RequestParam Map<String, String> taskForm
             , @RequestHeader("access-token") String access_token) {
-        Object data = bpmService.completeTask(access_token, taskForm);
+        Object data = bpmService.completeTask(access_token, taskId, taskForm);
         return ResponseDTO.build(data);
     }
 
