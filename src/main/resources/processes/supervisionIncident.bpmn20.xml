@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/processdef">
+  <process id="supervisionIncident" isExecutable="true">
+    <startEvent id="startEvent" name="发布督办事件" activiti:formKey="SupervisionIncident.form"></startEvent>
+    <userTask id="riverMasterApprove" name="区级河长批准" activiti:candidateGroups="区级河长" activiti:formKey="RiverMasterApprove.form"></userTask>
+    <userTask id="RiverHeadOfficeHandler" name="河长办公室处理" activiti:candidateGroups="河长办" activiti:formKey="RiverHeadOfficeHandler.form"></userTask>
+    <exclusiveGateway id="sid-55D10423-CA38-4FD2-ABA4-DB9AF56915A1"></exclusiveGateway>
+    <userTask id="OfficeReply" name="河长办公室回复" activiti:candidateGroups="河长办" activiti:formKey="OfficeReply.form"></userTask>
+    <userTask id="riverMasterConfirm" name="区级河长确认" activiti:candidateGroups="区级河长" activiti:formKey="RiverMasterConfirm.form"></userTask>
+    <endEvent id="stopEvent"></endEvent>
+    <userTask id="subordinate" name="下级单位回复" activiti:candidateGroups="下级河长与成员单位" activiti:formKey="SubordinateReply.form"></userTask>
+    <sequenceFlow id="flow_1" sourceRef="startEvent" targetRef="riverMasterApprove"></sequenceFlow>
+    <sequenceFlow id="flow_2" name="确认督办" sourceRef="riverMasterApprove" targetRef="RiverHeadOfficeHandler"></sequenceFlow>
+    <sequenceFlow id="flow_3" name="选择回复方式" sourceRef="RiverHeadOfficeHandler" targetRef="sid-55D10423-CA38-4FD2-ABA4-DB9AF56915A1"></sequenceFlow>
+    <sequenceFlow id="flow_6" name="确认事件" sourceRef="riverMasterConfirm" targetRef="stopEvent"></sequenceFlow>
+    <sequenceFlow id="flow_5" name="等待区级河长确认" sourceRef="OfficeReply" targetRef="riverMasterConfirm"></sequenceFlow>
+    <sequenceFlow id="flow_4" name="办公室汇报" sourceRef="sid-55D10423-CA38-4FD2-ABA4-DB9AF56915A1" targetRef="OfficeReply">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${officeReply=='true'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow_7" name="下级单位汇报" sourceRef="sid-55D10423-CA38-4FD2-ABA4-DB9AF56915A1" targetRef="subordinate">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${officeReply=='false'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow_8" name="等待区级河长确认" sourceRef="subordinate" targetRef="riverMasterConfirm"></sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_process">
+    <bpmndi:BPMNPlane bpmnElement="process" id="BPMNPlane_process">
+      <bpmndi:BPMNShape bpmnElement="startEvent" id="BPMNShape_startEvent">
+        <omgdc:Bounds height="30.0" width="30.0" x="105.0" y="328.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="riverMasterApprove" id="BPMNShape_riverMasterApprove">
+        <omgdc:Bounds height="80.0" width="100.0" x="225.0" y="303.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="RiverHeadOfficeHandler" id="BPMNShape_RiverHeadOfficeHandler">
+        <omgdc:Bounds height="80.0" width="100.0" x="405.0" y="303.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="sid-55D10423-CA38-4FD2-ABA4-DB9AF56915A1" id="BPMNShape_sid-55D10423-CA38-4FD2-ABA4-DB9AF56915A1">
+        <omgdc:Bounds height="40.0" width="40.0" x="615.0" y="323.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="OfficeReply" id="BPMNShape_OfficeReply">
+        <omgdc:Bounds height="80.0" width="100.0" x="585.0" y="480.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="riverMasterConfirm" id="BPMNShape_riverMasterConfirm">
+        <omgdc:Bounds height="80.0" width="100.0" x="810.0" y="303.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="stopEvent" id="BPMNShape_stopEvent">
+        <omgdc:Bounds height="28.0" width="28.0" x="1005.0" y="329.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="subordinate" id="BPMNShape_subordinate">
+        <omgdc:Bounds height="80.0" width="100.0" x="585.0" y="120.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="flow_5" id="BPMNEdge_flow_5">
+        <omgdi:waypoint x="685.0" y="520.0"></omgdi:waypoint>
+        <omgdi:waypoint x="860.0" y="520.0"></omgdi:waypoint>
+        <omgdi:waypoint x="860.0" y="383.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow_6" id="BPMNEdge_flow_6">
+        <omgdi:waypoint x="910.0" y="343.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1005.0" y="343.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow_7" id="BPMNEdge_flow_7">
+        <omgdi:waypoint x="635.4453551912568" y="323.44535519125685"></omgdi:waypoint>
+        <omgdi:waypoint x="635.1089918256131" y="200.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow_8" id="BPMNEdge_flow_8">
+        <omgdi:waypoint x="685.0" y="160.0"></omgdi:waypoint>
+        <omgdi:waypoint x="860.0" y="160.0"></omgdi:waypoint>
+        <omgdi:waypoint x="860.0" y="303.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow_1" id="BPMNEdge_flow_1">
+        <omgdi:waypoint x="135.0" y="343.0"></omgdi:waypoint>
+        <omgdi:waypoint x="225.0" y="343.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow_2" id="BPMNEdge_flow_2">
+        <omgdi:waypoint x="325.0" y="343.0"></omgdi:waypoint>
+        <omgdi:waypoint x="405.0" y="343.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow_3" id="BPMNEdge_flow_3">
+        <omgdi:waypoint x="505.0" y="343.0"></omgdi:waypoint>
+        <omgdi:waypoint x="615.0" y="343.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow_4" id="BPMNEdge_flow_4">
+        <omgdi:waypoint x="635.4460227272727" y="362.55397727272725"></omgdi:waypoint>
+        <omgdi:waypoint x="635.1133144475921" y="480.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

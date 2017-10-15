@@ -23,7 +23,7 @@ public class DaPengBPM implements Serializable {
 
     @Autowired
     private BPMService bpmService;
-    @Value("${bpm.process.id:myProcess_1:1:4}")
+    @Value("${bpm.process.id:supervisionIncident:1:4}")
     private String processId;
 
     /**
