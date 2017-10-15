@@ -84,6 +84,12 @@ public class BPMServiceImpl implements BPMService {
         return true;
     }
 
+    private Object getTaskSummary(String taskId) {
+        return formService.getTaskFormData(taskId).getFormProperties()
+                .stream().filter(formProperty -> !formProperty.getId().equals("describe"))
+                .collect(toList());
+    }
+
     @Override
     public Object listTask(String access_token) {
         ResponseDTO<UserVO> response = receptionCenterClient.who(access_token);
@@ -102,7 +108,7 @@ public class BPMServiceImpl implements BPMService {
             repo.put("createTime", task.getCreateTime());
             repo.put("description", task.getDescription());
             repo.put("owner", task.getOwner());
-            repo.put("formDate", formService.getTaskFormData(task.getId()).getFormProperties());
+            repo.put("formDate", getTaskSummary(task.getId()));
             return repo;
         }).collect(toList());
     }
