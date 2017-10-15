@@ -10,6 +10,7 @@ import org.activiti.engine.IdentityService;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.form.FormProperty;
+import org.activiti.engine.form.StartFormData;
 import org.activiti.engine.form.TaskFormData;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.task.Task;
@@ -54,7 +55,7 @@ public class BPMServiceImpl implements BPMService {
             throw BasicException.build(response.getMsg(), response.getCode());
         }
 
-        TaskFormData taskFormData = formService.getTaskFormData(processId);
+        StartFormData taskFormData = formService.getStartFormData(processId);
         if (null == taskFormData) {
             throw BasicException.build("no such this process!.", HttpStatus.SC_NOT_FOUND);
         }
@@ -73,9 +74,7 @@ public class BPMServiceImpl implements BPMService {
             variables.put(key, formData.get(key).toString());
         });
         identityService.setAuthenticatedUserId(response.getData().getId()); // 设置发起流程的用户
-        ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery()
-                .processDefinitionKey(processId).singleResult(); // 启动流程
-        Object data = formService.submitStartFormData(processDefinition.getId(), variables);
+        Object data = formService.submitStartFormData(processId, variables);
         if (null == data) {
             throw BasicException.build("create task failed!", HttpStatus.SC_INTERNAL_SERVER_ERROR);
         }
