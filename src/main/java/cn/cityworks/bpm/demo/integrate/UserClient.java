@@ -22,12 +22,38 @@ public interface UserClient {
     Map getUserById(@PathVariable(value = "userId") String userId);
 
     /**
-     * 获取用户列表
+     * 用户列表
+     *
+     * @param page
+     * @param number
+     * @return
+     */
+    @RequestMapping(value = "/users", method = RequestMethod.GET)
+    Map listUsers(@RequestParam(required = false, value = "page", defaultValue = "0") int page
+            , @RequestParam(required = false, value = "size", defaultValue = "50") int number);
+
+    /**
+     * 获取用户组 通过 (组id)groupId
      *
      * @return
      */
     @RequestMapping(value = "/users", method = RequestMethod.GET)
-    Map users();
+    Map listUsersByGroupId(@RequestParam(value = "groupId") String groupId
+            , @RequestParam(required = false, value = "page", defaultValue = "0") int page
+            , @RequestParam(required = false, value = "size", defaultValue = "50") int number);
+
+    /**
+     * 获取用户组 通过 用户名(username)
+     *
+     * @param username
+     * @param page
+     * @param number
+     * @return
+     */
+    @RequestMapping(value = "/users", method = RequestMethod.GET)
+    Map listUsersByUsername(@RequestParam(value = "name") String username
+            , @RequestParam(required = false, value = "page", defaultValue = "0") int page
+            , @RequestParam(required = false, value = "size", defaultValue = "50") int number);
 
     /**
      * 获取组列表 按照名字搜索
