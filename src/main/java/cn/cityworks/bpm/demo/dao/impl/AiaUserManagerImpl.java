@@ -1,5 +1,7 @@
 package cn.cityworks.bpm.demo.dao.impl;
 
+import cn.cityworks.bpm.demo.exceptions.BasicException;
+import cn.cityworks.bpm.demo.integrate.UserClient;
 import org.activiti.engine.identity.Group;
 import org.activiti.engine.identity.User;
 import org.activiti.engine.identity.UserQuery;
@@ -9,6 +11,8 @@ import org.activiti.engine.impl.persistence.entity.GroupEntity;
 import org.activiti.engine.impl.persistence.entity.IdentityInfoEntity;
 import org.activiti.engine.impl.persistence.entity.UserEntity;
 import org.activiti.engine.impl.persistence.entity.UserEntityManager;
+import org.apache.http.HttpStatus;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,54 +21,41 @@ import java.util.Map;
 @Service
 public class AiaUserManagerImpl extends UserEntityManager {
 
+    @Autowired
+    private UserClient userClient;
+
     public User createNewUser(String userId) {
         return new UserEntity(userId);
     }
 
     public void insertUser(User user) {
-//      getDbSqlSession().insert((PersistentObject) user);
-        throw new RuntimeException("not implement method.");
-    }
-
-    public void updateUser(UserEntity updatedUser) {
-//      CommandContext commandContext = Context.getCommandContext();
-//      DbSqlSession dbSqlSession = commandContext.getDbSqlSession();
-//      dbSqlSession.update(updatedUser);
-        throw new RuntimeException("not implement method.");
-    }
-
-    public UserEntity findUserById(String userId) {
-//      return (UserEntity) getDbSqlSession().selectOne("selectUserById", userId);
-//        return toActivitiUser(userService.obtainUser(userId));
-        throw new RuntimeException("not implement method.");
-    }
-
-    private UserEntity toActivitiUser(){
-//        User user
-//        if (user == null){
-//            return null;
-//        }
-//        UserEntity userEntity = new UserEntity();
-//        userEntity.setId(user.getLoginName());
-//        userEntity.setFirstName(user.getName());
-//        userEntity.setLastName(StringUtils.EMPTY);
-//        userEntity.setPassword(user.getPassword());
-//        userEntity.setEmail(user.getEmail());
-//        userEntity.setRevision(1);
-        throw new RuntimeException("not implement method.");
+        throw BasicException.build("can't create user by this service. Please use user-maneger in soa"
+                , HttpStatus.SC_UNAUTHORIZED);
     }
 
     public void deleteUser(String userId) {
-//      UserEntity user = findUserById(userId);
-//      if (user != null) {
-//          List<IdentityInfoEntity> identityInfos = getDbSqlSession().selectList("selectIdentityInfoByUserId", userId);
-//          for (IdentityInfoEntity identityInfo : identityInfos) {
-//              getIdentityInfoManager().deleteIdentityInfo(identityInfo);
-//          }
-//          getDbSqlSession().delete("deleteMembershipsByUserId", userId);
-//          user.delete();
-//      }
-        throw new RuntimeException("not implement method.");
+        throw BasicException.build("can't create user by this service. Please use user-maneger in soa"
+                , HttpStatus.SC_UNAUTHORIZED);
+    }
+
+    public void updateUser(UserEntity updatedUser) {
+        throw BasicException.build("can't create user by this service. Please use user-maneger in soa"
+                , HttpStatus.SC_UNAUTHORIZED);
+    }
+
+    public UserEntity findUserById(String userId) {
+        Map result = userClient.getUserById(userId);
+        if (HttpStatus.SC_OK != Integer.valueOf(result.get("code").toString())) {
+            return null;
+        }
+        Map data = (Map) result.get("data");
+        UserEntity user = new UserEntity();
+        user.setId(data.get("id").toString());
+        user.setRevision(1);
+        user.setFirstName(data.get("username").toString());
+        user.setLastName(data.get("nickname").toString());
+        user.setEmail(data.get("email").toString());
+        return user;
     }
 
     public List<User> findUserByQueryCriteria(UserQueryImpl query, Page page) {

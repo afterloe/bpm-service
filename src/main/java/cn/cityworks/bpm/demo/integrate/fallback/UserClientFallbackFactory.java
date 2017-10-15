@@ -46,6 +46,12 @@ public class UserClientFallbackFactory implements FallbackFactory<UserClient>, S
         return fallback = new UserClient() {
 
             @Override
+            public Map getUserById(String userId) {
+                LOGGER.error("getUserById({}) invoke fail", userId);
+                return responseObjectDTO;
+            }
+
+            @Override
             public Map users() {
                 LOGGER.error("users() invoke fail");
                 return responseObjectDTO;

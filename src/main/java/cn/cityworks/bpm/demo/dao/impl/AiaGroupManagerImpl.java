@@ -54,7 +54,24 @@ public class AiaGroupManagerImpl extends GroupEntityManager implements Serializa
                 , HttpStatus.SC_UNAUTHORIZED);
     }
 
+    private long getNumber(Map result) {
+        if (HttpStatus.SC_OK != Integer.valueOf(result.get("code").toString())) {
+            return 0l;
+        }
+        Map pageObject = (Map) result.get("data");
+        Long value = 0l;
+        try {
+            value = (Long) pageObject.get("totalElements");
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+        return value;
+    }
+
     private List<Group> transformation(Map result) {
+        if (HttpStatus.SC_OK != Integer.valueOf(result.get("code").toString())) {
+            return Lists.newArrayList();
+        }
         Map data = (Map) result.get("data");
         if (data.containsKey("content")) {
             List<Map> content = (List) data.get("content");
@@ -91,17 +108,6 @@ public class AiaGroupManagerImpl extends GroupEntityManager implements Serializa
             return transformation(userClient.listGroupsByName(name, pageNumber, size));
         }
         return transformation(userClient.listGroups(pageNumber, size));
-    }
-
-    private long getNumber(Map result) {
-        Map pageObject = (Map) result.get("data");
-        Long value = 0l;
-        try {
-            value = (Long) pageObject.get("totalElements");
-        } catch (Exception exception) {
-            exception.printStackTrace();
-        }
-        return value;
     }
 
     public long findGroupCountByQueryCriteria(GroupQueryImpl query) {
