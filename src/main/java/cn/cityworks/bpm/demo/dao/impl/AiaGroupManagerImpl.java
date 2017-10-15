@@ -55,16 +55,25 @@ public class AiaGroupManagerImpl extends GroupEntityManager implements Serializa
     }
 
     private List<Group> transformation(Map result) {
-        Map pageObject = (Map) result.get("data");
-        List<Map> content = (List) pageObject.get("content");
-        return content.stream().map(obj -> {
-            GroupEntity group = new GroupEntity();
-            group.setId(obj.get("id").toString());
-            group.setName(obj.get("groupName").toString());
-            group.setType(obj.get("active").toString());
-            group.setRevision(1);
-            return group;
-        }).collect(toList());
+        Map data = (Map) result.get("data");
+        if (data.containsKey("content")) {
+            List<Map> content = (List) data.get("content");
+            return content.stream().map(obj -> {
+                GroupEntity group = new GroupEntity();
+                group.setId(obj.get("id").toString());
+                group.setName(obj.get("groupName").toString());
+                group.setType(obj.get("active").toString());
+                group.setRevision(1);
+                return group;
+            }).collect(toList());
+        }
+        GroupEntity group = new GroupEntity();
+        group.setId(data.get("id").toString());
+        group.setName(data.get("groupName").toString());
+        group.setType(data.get("active").toString());
+        group.setRevision(1);
+
+        return Lists.newArrayList(group);
     }
 
     public List<Group> findGroupByQueryCriteria(GroupQueryImpl query, Page page) {
@@ -84,22 +93,32 @@ public class AiaGroupManagerImpl extends GroupEntityManager implements Serializa
         return transformation(userClient.listGroups(pageNumber, size));
     }
 
+    private long getNumber(Map result) {
+        Map pageObject = (Map) result.get("data");
+        Long value = 0l;
+        try {
+            value = (Long) pageObject.get("totalElements");
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+        return value;
+    }
+
     public long findGroupCountByQueryCriteria(GroupQueryImpl query) {
-//        return (Long) getDbSqlSession().selectOne("selectGroupCountByQueryCriteria", query);
-        throw new RuntimeException("not implement method.");
+        Integer size = null, pageNumber = null;
+        if (null != query.getId()) {
+            return getNumber(userClient.getGroups(query.getId()));
+        }
+        String name = Optional.ofNullable(query.getName()).orElse(query.getNameLike());
+        if (null != name) {
+            return getNumber(userClient.listGroupsByName(name, pageNumber, size));
+        }
+        return getNumber(userClient.listGroups(pageNumber, size));
     }
 
     public List<Group> findGroupsByUser(String userId) {
-//        return getDbSqlSession().selectList("selectGroupsByUserId", userId);
-        List<Group> list = Lists.newArrayList();
-//        User user = userService.obtainUser(userId);
-//        if (user != null){
-//            List<Role> roles=roleService.obtainRoles(userId);
-//            for (Role role : roles){
-//                list.add(toActivitiGroup(role));
-//            }
-//        }
-        throw new RuntimeException("not implement method.");
+        Integer size = null, pageNumber = null;
+        return transformation(userClient.listGroupsByUserId(userId, pageNumber, size));
     }
 
     public List<Group> findGroupsByNativeQuery(Map<String, Object> parameterMap, int firstResult, int maxResults) {

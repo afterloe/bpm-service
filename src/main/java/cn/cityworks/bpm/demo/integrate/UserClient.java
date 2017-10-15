@@ -23,6 +23,11 @@ public interface UserClient {
     @RequestMapping(value = "/groups/{groupId}/one", method = RequestMethod.GET)
     Map getGroups(@PathVariable(value = "groupId", required = false) String groupId);
 
+    @RequestMapping(value = "/users/{userId}/groups", method = RequestMethod.GET)
+    Map listGroupsByUserId(@PathVariable(value = "userId") String userId
+            , @RequestParam(required = false, value = "page", defaultValue = "0") int page
+            , @RequestParam(required = false, value = "size", defaultValue = "50") int number);
+
     @RequestMapping(value = "/groups", method = RequestMethod.GET)
     Map listGroups(@RequestParam(required = false, value = "page", defaultValue = "0") int page
             , @RequestParam(required = false, value = "size", defaultValue = "50") int number);

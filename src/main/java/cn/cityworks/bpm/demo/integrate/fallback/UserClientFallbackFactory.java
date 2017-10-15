@@ -64,6 +64,12 @@ public class UserClientFallbackFactory implements FallbackFactory<UserClient>, S
             }
 
             @Override
+            public Map listGroupsByUserId(String userId, int page, int number) {
+                LOGGER.error("listGroupsByUserId({}, {}, {}) invoke fail", userId, page, number);
+                return responseObjectDTO;
+            }
+
+            @Override
             public Map listGroups(int page, int number) {
                 LOGGER.error("listGroups({}, {}) invoke fail", page, number);
                 return responseObjectDTO;
