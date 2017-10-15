@@ -27,6 +27,32 @@ public class DaPengBPM implements Serializable {
     private String processId;
 
     /**
+     * 获取督办事件表单
+     *
+     * @return
+     */
+    @RequestMapping(value = "supervisionIncident", method = RequestMethod.GET)
+    public ResponseDTO getFromDataList(@RequestParam(required = false) String processId) {
+        if (null == processId) {
+            processId = this.processId;
+        }
+        Object data = bpmService.getFromDataList(processId);
+        return ResponseDTO.build(data);
+    }
+
+    /**
+     * 上报督办事件
+     *
+     * @return
+     */
+    @RequestMapping(value = "supervisionIncident", method = RequestMethod.POST)
+    public ResponseDTO reportSupervisionIncident(@RequestParam Map<String, String> taskForm
+            , @RequestHeader("access-token") String access_token) {
+        Object data = bpmService.reportSupervisionIncident(processId, taskForm, access_token);
+        return ResponseDTO.build(data);
+    }
+
+    /**
      * 完成任务
      *
      * @param taskForm
@@ -65,29 +91,6 @@ public class DaPengBPM implements Serializable {
             , @RequestParam(value = "page", required = false, defaultValue = "0") int page
             , @RequestParam(value = "number", required = false, defaultValue = "50") int number) {
         Object data = bpmService.listTask(access_token);
-        return ResponseDTO.build(data);
-    }
-
-    /**
-     * 获取事件表单类型列表
-     *
-     * @return
-     */
-    @RequestMapping(value = "postItem", method = RequestMethod.GET)
-    public ResponseDTO listTaskFormData() {
-        Object data = bpmService.getProcessFormDataByStart(processId);
-        return ResponseDTO.build(data);
-    }
-
-    /**
-     * 上报事件
-     *
-     * @return
-     */
-    @RequestMapping(value = "postItem", method = RequestMethod.POST)
-    public ResponseDTO startProcess(@RequestParam Map<String, String> taskForm
-        , @RequestHeader("access-token") String access_token) {
-        Object data = bpmService.startProcess(processId, taskForm, access_token);
         return ResponseDTO.build(data);
     }
 }

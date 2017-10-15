@@ -36,7 +36,7 @@ public class BPM implements Serializable {
      * @return
      */
     @RequestMapping(value = "list", method = RequestMethod.GET)
-    public ResponseDTO getTaskForm(
+    public ResponseDTO listProcess(
             @RequestParam(value = "page", required = false, defaultValue = "0") int page
             , @RequestParam(value = "number", required = false, defaultValue = "50") int number) {
         List<ProcessDefinition> data = repositoryService.createProcessDefinitionQuery().list();

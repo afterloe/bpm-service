@@ -14,7 +14,7 @@ public interface BPMService extends Serializable{
      * @param processId
      * @return
      */
-    Object getProcessFormDataByStart(String processId);
+    Object getFromDataList(String processId);
 
     /**
      * 启动流程
@@ -23,7 +23,7 @@ public interface BPMService extends Serializable{
      * @param formData
      * @return
      */
-    Object startProcess(String processId, Map formData, String token);
+    Object reportSupervisionIncident(String processId, Map formData, String token);
 
     /**
      * 获取待办事件列表

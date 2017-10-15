@@ -32,7 +32,7 @@ public class BPMServiceImpl implements BPMService {
     private TaskService taskService;
 
     @Override
-    public Object getProcessFormDataByStart(String processId) {
+    public Object getFromDataList(String processId) {
         return formService.getStartFormData(processId).getFormProperties();
     }
 
