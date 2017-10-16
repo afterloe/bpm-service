@@ -190,11 +190,10 @@ public class BPMServiceImpl implements BPMService {
         Map<String, String> variables = new HashMap<>();
         FormProperty lackParameter = items.stream()
                 .filter(item -> item.isRequired() && !formData.containsKey(item.getId()))
-                .findAny()
-                .orElse(null);
+                .findAny().orElse(null);
         if (null != lackParameter) {
-            throw BasicException.build("lack parameter -> " + lackParameter.getId(),
-                    HttpStatus.SC_BAD_REQUEST);
+            throw BasicException.build("lack parameter -> " + lackParameter.getId()
+                    , HttpStatus.SC_BAD_REQUEST);
         }
         items.stream().filter(FormProperty::isWritable).forEach(item -> {
             String key = item.getId();
