@@ -69,6 +69,28 @@ public class BPMServiceImpl implements BPMService {
     };
 
     @Override
+    public Object myTask(String token) {
+        ResponseDTO<UserVO> response = receptionCenterClient.who(token);
+        if (200 != response.getCode()) {
+            throw BasicException.build(response.getMsg(), response.getCode());
+        }
+        return taskService.createTaskQuery()
+                .taskAssigneeLike(response.getData().getId()).list().stream()
+                .map(task -> {
+                    Map repo = new LinkedHashMap();
+                    repo.put("name", task.getName());
+                    repo.put("id", task.getId());
+                    repo.put("processInstanceId", task.getProcessInstanceId());
+                    repo.put("assignee", task.getAssignee());
+                    repo.put("createTime", task.getCreateTime());
+                    repo.put("description", task.getDescription());
+                    repo.put("owner", task.getOwner());
+                    repo.put("formDate", getTaskSummary(task.getId()));
+                    return repo;
+                }).collect(toList());
+    }
+
+    @Override
     public Object getFromDataList(String processId) {
         return formService.getStartFormData(processId).getFormProperties().stream()
                 .map(handlerFormProperty).collect(toList());
@@ -141,7 +163,6 @@ public class BPMServiceImpl implements BPMService {
                 return repo;
             }).collect(toList()));
         });
-
         return groups;
     }
 

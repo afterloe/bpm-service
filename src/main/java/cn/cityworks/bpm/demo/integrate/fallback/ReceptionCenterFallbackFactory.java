@@ -37,7 +37,7 @@ public class ReceptionCenterFallbackFactory implements FallbackFactory<Reception
         }
 
         responseObjectDTO = ResponseDTO.build(null, HttpResponseStatus.BAD_GATEWAY.code()
-                , "ReceptionCenterClient is not available");
+                , "token error or no permission");
 
         return receptionCenterClient = new ReceptionCenterClient() {
             @Override

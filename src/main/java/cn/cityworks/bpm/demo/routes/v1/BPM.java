@@ -1,6 +1,7 @@
 package cn.cityworks.bpm.demo.routes.v1;
 
 import cn.cityworks.bpm.demo.domain.ResponseDTO;
+import cn.cityworks.bpm.demo.services.BPMService;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
@@ -9,10 +10,7 @@ import org.activiti.engine.runtime.ProcessInstance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.Serializable;
 import java.util.LinkedHashMap;
@@ -36,6 +34,24 @@ public class BPM implements Serializable {
     private RuntimeService runtimeService;
     @Autowired
     private TaskService taskService;
+    @Autowired
+    private BPMService bpmService;
+
+    /**
+     * 获取我的任务
+     *
+     * @param access_token
+     * @param page
+     * @param number
+     * @return
+     */
+    @RequestMapping(value = "list/mine", method = RequestMethod.GET)
+    public ResponseDTO listTask(@RequestHeader("access-token") String access_token
+            , @RequestParam(value = "page", required = false, defaultValue = "0") int page
+            , @RequestParam(value = "number", required = false, defaultValue = "50") int number) {
+        Object data = bpmService.myTask(access_token);
+        return ResponseDTO.build(data);
+    }
 
     /**
      * 获取所有活动流程
