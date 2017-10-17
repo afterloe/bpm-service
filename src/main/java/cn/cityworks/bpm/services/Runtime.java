@@ -1,6 +1,7 @@
 package cn.cityworks.bpm.services;
 
 import java.io.Serializable;
+import java.util.Map;
 
 /**
  * create by afterloe on 2017/10/17
@@ -15,4 +16,12 @@ public interface Runtime extends Serializable {
      * @return
      */
     Object listActive(int page, int number);
+
+    /**
+     * 启动流程次
+     * 
+     * @param processData
+     * @return
+     */
+    Object startProcess(Map processData);
 }

@@ -1,5 +1,6 @@
 package cn.cityworks.bpm.services.impl;
 
+import cn.cityworks.bpm.exceptions.BasicException;
 import cn.cityworks.bpm.services.Runtime;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.runtime.ProcessInstance;
@@ -20,6 +21,24 @@ public class RuntimeServiceImpl implements Runtime {
 
     @Autowired
     private RuntimeService runtimeService;
+
+    @Override
+    public Object startProcess(Map processData) {
+        ProcessInstance instance = runtimeService
+                .startProcessInstanceByKey("supervisionIncident", "");
+        if (null == instance) {
+            throw BasicException.build("start process failed");
+        }
+        Map result = new LinkedHashMap();
+        result.put("businessKey", instance.getBusinessKey());
+        result.put("name", instance.getName());
+        result.put("id", instance.getId());
+        result.put("version", instance.getProcessDefinitionVersion());
+        result.put("definitionName", instance.getProcessDefinitionName());
+        result.put("definitionId", instance.getProcessDefinitionId());
+        result.put("processId", instance.getProcessInstanceId());
+        return result;
+    }
 
     @Override
     public Object listActive(int page, int number) {

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.Serializable;
+import java.util.Map;
 
 /**
  * create by afterloe on 2017/10/17
@@ -18,6 +19,18 @@ public class Runtime implements Serializable {
 
     @Autowired
     private cn.cityworks.bpm.services.Runtime runtimeService;
+
+    /**
+     * 启动流程次
+     *
+     * @param processData
+     * @return
+     */
+    @RequestMapping(method = RequestMethod.POST)
+    public ResponseDTO startProcess(@RequestParam Map<String, String> processData) {
+        Object data = runtimeService.startProcess(processData);
+        return ResponseDTO.build(data);
+    }
 
     /**
      * 获取所有启动的流程
