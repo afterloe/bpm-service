@@ -119,7 +119,6 @@ public class BPMServiceImpl implements BPMService {
     @Override
     public Object getFromDataList(String processId){
         StartFormData startFormData = formService.getStartFormData(processId);
-        LOGGER.info("{}", startFormData);
         if (null != startFormData.getFormKey()) {
             String formKey = startFormData.getFormKey();
             try {
@@ -208,8 +207,17 @@ public class BPMServiceImpl implements BPMService {
 
     @Override
     public Object getTaskForm(String taskId) {
-        TaskFormData data = formService.getTaskFormData(taskId);
-        return data.getFormProperties().stream().map(handlerFormProperty).collect(toList());
+        Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+        if (null == task) {
+            throw BasicException.build("task not found!");
+        }
+        if (null != task.getFormKey()) {
+            return formService.getRenderedTaskForm(task.getId()).toString();
+        } else {
+            return task.getTaskLocalVariables();
+        }
+//        TaskFormData taskFormData = formService.getTaskFormData(taskId);
+//      return taskFormData.getFormProperties().stream().map(handlerFormProperty).collect(toList());
     }
 
     @Override

@@ -41,6 +41,12 @@ public class Error implements ErrorController, Serializable {
         return ResponseDTO.build(null, 500,"system is busy");
     }
 
+    @ExceptionHandler(ActivitiObjectNotFoundException.class)
+    public ResponseDTO handleActivitiObjectNotFoundException(Exception e) {
+        e.printStackTrace();
+        return ResponseDTO.build(null, 404, "task not found");
+    }
+
     @ExceptionHandler(ActivitiException.class)
     public ResponseDTO handleActivitiException(Exception e) {
         e.printStackTrace();
@@ -60,11 +66,6 @@ public class Error implements ErrorController, Serializable {
     @ExceptionHandler(ServletRequestBindingException.class)
     public ResponseDTO handleServletRequestBindingException(Exception e) {
         return ResponseDTO.build(null, 400, "lack header");
-    }
-
-    @ExceptionHandler(ActivitiObjectNotFoundException.class)
-    public ResponseDTO handleActivitiObjectNotFoundException(Exception e) {
-        return ResponseDTO.build(null, 404, "task not found");
     }
 
     @ExceptionHandler(IOException.class)
