@@ -5,7 +5,7 @@ datasource:
   name: "centos"
 
 server:
-  port: 8030
+  port: 3030
   undertow:
     direct-buffers: true
 
