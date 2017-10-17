@@ -52,24 +52,6 @@ public class BPMServiceImpl implements BPMService {
     @Autowired
     private UserClient userClient;
 
-    Function<FormProperty, Map> handlerFormProperty = item -> {
-        Map value = new LinkedHashMap();
-        value.put("id", item.getId());
-        value.put("name", item.getName());
-        FormType type = item.getType();
-        Map typeInfo = new LinkedHashMap();
-        typeInfo.put("name", type.getName());
-        if (type.getName().equals("enum")) {
-            typeInfo.put("values", type.getInformation("values"));
-        }
-        value.put("type", typeInfo);
-        value.put("value", item.getValue());
-        value.put("required", item.isRequired());
-        value.put("readable", item.isReadable());
-        value.put("writable", item.isWritable());
-        return value;
-    };
-
     @Override
     public Object myTask(String token) {
         ResponseDTO<UserVO> response = receptionCenterClient.who(token);
@@ -113,25 +95,6 @@ public class BPMServiceImpl implements BPMService {
             }
 
             return stringBuffer;
-        }
-    }
-
-    @Override
-    public Object getFromDataList(String processId){
-        StartFormData startFormData = formService.getStartFormData(processId);
-        if (null != startFormData.getFormKey()) {
-            String formKey = startFormData.getFormKey();
-            try {
-                StringBuffer formBuffer = getFormData(
-                        ResourceUtils.getFile("classpath:processes/" + formKey));
-                return formBuffer.toString();
-            } catch (Exception exception){
-                exception.printStackTrace();
-                return formKey;
-            }
-        } else {
-            return formService.getStartFormData(processId).getFormProperties().stream()
-                .map(handlerFormProperty).collect(toList());
         }
     }
 
