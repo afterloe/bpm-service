@@ -37,28 +37,7 @@ public class BPM implements Serializable {
     @Autowired
     private BPMService bpmService;
 
-    /**
-     * 获取所有活动流程
-     *
-     * @param page
-     * @param number
-     * @return
-     */
-    @RequestMapping(value = "list/active", method = RequestMethod.GET)
-    public ResponseDTO listActiveProcess(@RequestParam(value = "page", required = false, defaultValue = "0") int page
-            , @RequestParam(value = "number", required = false, defaultValue = "50") int number) {
-        List<ProcessInstance> data = runtimeService.createProcessInstanceQuery().active().list();
-        Object processList = data.stream().map(p -> {
-            Map m = new LinkedHashMap<>();
-            m.put("id", p.getProcessDefinitionId());
-            m.put("processDefinitionName", p.getProcessDefinitionName());
-            m.put("processInstanceId", p.getProcessInstanceId());
-            m.put("name", p.getName());
-            return m;
-        }).collect(toList());
 
-        return ResponseDTO.build(processList);
-    }
 
     /**
      * 获取已经部署的流程列表
