@@ -1,4 +1,4 @@
-package cn.cityworks.bpm.demo.routes.v1;
+package cn.cityworks.bpm.demo.routers.v1;
 
 import cn.cityworks.bpm.demo.domain.ResponseDTO;
 import cn.cityworks.bpm.demo.services.BPMService;

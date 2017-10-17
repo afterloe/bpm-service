@@ -1,4 +1,4 @@
-package cn.cityworks.bpm.demo.routes;
+package cn.cityworks.bpm.demo.routers;
 
 import cn.cityworks.bpm.demo.domain.ResponseDTO;
 import cn.cityworks.bpm.demo.exceptions.BasicException;
