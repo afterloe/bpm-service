@@ -17,7 +17,7 @@ import java.io.Serializable;
 public class Runtime implements Serializable {
 
     @Autowired
-    private cn.cityworks.bpm.services.Runtime runtime;
+    private cn.cityworks.bpm.services.Runtime runtimeService;
 
     /**
      * 获取所有启动的流程
@@ -29,7 +29,7 @@ public class Runtime implements Serializable {
     @RequestMapping(value = "list/active", method = RequestMethod.GET)
     public ResponseDTO listActive(@RequestParam(value = "page", required = false, defaultValue = "0") int page
             , @RequestParam(value = "number", required = false, defaultValue = "50") int number) {
-        Object data = runtime.listActive(page, number);
+        Object data = runtimeService.listActive(page, number);
         return ResponseDTO.build(data);
     }
 }

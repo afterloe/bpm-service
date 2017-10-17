@@ -7,5 +7,12 @@ import java.io.Serializable;
  */
 public interface Runtime extends Serializable {
 
+    /**
+     * 获取所有启动的流程
+     *
+     * @param page
+     * @param number
+     * @return
+     */
     Object listActive(int page, int number);
 }
