@@ -38,22 +38,6 @@ public class BPM implements Serializable {
     private BPMService bpmService;
 
     /**
-     * 获取我的任务
-     *
-     * @param access_token
-     * @param page
-     * @param number
-     * @return
-     */
-    @RequestMapping(value = "list/mine", method = RequestMethod.GET)
-    public ResponseDTO listTask(@RequestHeader("access-token") String access_token
-            , @RequestParam(value = "page", required = false, defaultValue = "0") int page
-            , @RequestParam(value = "number", required = false, defaultValue = "50") int number) {
-        Object data = bpmService.myTask(access_token);
-        return ResponseDTO.build(data);
-    }
-
-    /**
      * 获取所有活动流程
      *
      * @param page
