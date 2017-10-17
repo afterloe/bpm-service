@@ -20,7 +20,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ResourceUtils;
 
+import java.io.*;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -90,10 +92,48 @@ public class BPMServiceImpl implements BPMService {
                 }).collect(toList());
     }
 
+    private StringBuffer getFormData(File file) {
+        BufferedReader bufferedReader = null;
+        StringBuffer stringBuffer = new StringBuffer();
+        try {
+            bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(file), "utf-8"));
+            String line = null;
+            while (null != (line = bufferedReader.readLine())) {
+                stringBuffer.append(line);
+            }
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        } finally {
+            if (null != bufferedReader) {
+                try {
+                    bufferedReader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            return stringBuffer;
+        }
+    }
+
     @Override
-    public Object getFromDataList(String processId) {
-        return formService.getStartFormData(processId).getFormProperties().stream()
+    public Object getFromDataList(String processId){
+        StartFormData startFormData = formService.getStartFormData(processId);
+        LOGGER.info("{}", startFormData);
+        if (null != startFormData.getFormKey()) {
+            String formKey = startFormData.getFormKey();
+            try {
+                StringBuffer formBuffer = getFormData(
+                        ResourceUtils.getFile("classpath:processes/" + formKey));
+                return formBuffer.toString();
+            } catch (Exception exception){
+                exception.printStackTrace();
+                return formKey;
+            }
+        } else {
+            return formService.getStartFormData(processId).getFormProperties().stream()
                 .map(handlerFormProperty).collect(toList());
+        }
     }
 
     @Override

@@ -1,7 +1,8 @@
 datasource:
-  ip: "192.168.0.110"
+  # ip: "192.168.0.110"
+  ip: "172.30.128.4"
   port: 5432
-  name: "postgres"
+  name: "centos"
 
 server:
   port: 8030
@@ -18,8 +19,8 @@ spring:
     hikari:
       max-lifetime: 1830000
       maximum-pool-size: 18
-    username: "postgres"
-    password: "postgres"
+    username: "centos"
+    password: "user123"
   http:
     multipart:
       maxFileSize: 20Mb

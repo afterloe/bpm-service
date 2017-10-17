@@ -1,5 +1,6 @@
 package cn.cityworks.bpm.demo.services;
 
+import java.io.FileNotFoundException;
 import java.io.Serializable;
 import java.util.Map;
 
@@ -17,7 +18,7 @@ public interface BPMService extends Serializable{
     Object myTask(String token);
 
     /**
-     * 获取启动的流程实力
+     * 获取表单数据结构
      *
      * @param processId
      * @return

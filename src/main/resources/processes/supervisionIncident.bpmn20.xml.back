@@ -1,14 +1,62 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/processdef">
   <process id="supervisionIncident" isExecutable="true">
-    <startEvent id="startEvent" name="发布督办事件" activiti:formKey="SupervisionIncident.form"></startEvent>
-    <userTask id="riverMasterApprove" name="区级河长批准" activiti:candidateGroups="区级河长" activiti:formKey="RiverMasterApprove.form"></userTask>
-    <userTask id="RiverHeadOfficeHandler" name="河长办公室处理" activiti:candidateGroups="河长办" activiti:formKey="RiverHeadOfficeHandler.form"></userTask>
+    <startEvent id="startEvent" name="发布督办事件">
+      <extensionElements>
+        <activiti:formProperty id="type" name="督办事项类型" type="enum" required="true">
+          <activiti:value id="水体整治" name="水体整治"></activiti:value>
+          <activiti:value id="黑臭问题" name="黑臭问题"></activiti:value>
+          <activiti:value id="游客事件" name="游客事件"></activiti:value>
+          <activiti:value id="特殊上报" name="特殊上报"></activiti:value>
+        </activiti:formProperty>
+        <activiti:formProperty id="title" name="标题" type="string" required="true"></activiti:formProperty>
+        <activiti:formProperty id="describe" name="问题描述" type="string" required="true"></activiti:formProperty>
+      </extensionElements>
+    </startEvent>
+    <userTask id="riverMasterApprove" name="区级河长批准" activiti:candidateGroups="区级河长">
+      <extensionElements>
+        <activiti:formProperty id="type" name="督办事项类型" type="string" writable="false" value="${type}"></activiti:formProperty>
+        <activiti:formProperty id="title" name="标题" type="string" writable="false" value="${title}"></activiti:formProperty>
+        <activiti:formProperty id="describe" name="问题描述" type="string" writable="false" value="${describe}"></activiti:formProperty>
+      </extensionElements>
+    </userTask>
+    <userTask id="RiverHeadOfficeHandler" name="河长办公室处理" activiti:candidateGroups="河长办">
+      <extensionElements>
+        <activiti:formProperty id="type" name="督办事项类型" type="string" writable="false" value="${type}"></activiti:formProperty>
+        <activiti:formProperty id="title" name="标题" type="string" writable="false" value="${title}"></activiti:formProperty>
+        <activiti:formProperty id="describe" name="问题描述" type="string" writable="false" value="${describe}"></activiti:formProperty>
+        <activiti:formProperty id="officeReply" name="选择回复方式" type="enum" required="true">
+          <activiti:value id="true" name="办公室汇报"></activiti:value>
+          <activiti:value id="false" name="下级河长与成员单位汇报"></activiti:value>
+        </activiti:formProperty>
+      </extensionElements>
+    </userTask>
     <exclusiveGateway id="sid-55D10423-CA38-4FD2-ABA4-DB9AF56915A1"></exclusiveGateway>
-    <userTask id="OfficeReply" name="河长办公室回复" activiti:candidateGroups="河长办" activiti:formKey="OfficeReply.form"></userTask>
-    <userTask id="riverMasterConfirm" name="区级河长确认" activiti:candidateGroups="区级河长" activiti:formKey="RiverMasterConfirm.form"></userTask>
+    <userTask id="OfficeReply" name="河长办公室回复" activiti:candidateGroups="河长办" activiti:formKey="OfficeReply.form">
+      <extensionElements>
+        <activiti:formProperty id="type" name="督办事项类型" type="string" writable="false" value="${type}"></activiti:formProperty>
+        <activiti:formProperty id="title" name="标题" type="string" writable="false" value="${title}"></activiti:formProperty>
+        <activiti:formProperty id="describe" name="问题描述" type="string" writable="false" value="${describe}"></activiti:formProperty>
+        <activiti:formProperty id="reply" name="回复问题" type="string" required="true"></activiti:formProperty>
+      </extensionElements>
+    </userTask>
+    <userTask id="riverMasterConfirm" name="区级河长确认" activiti:candidateGroups="区级河长" activiti:formKey="RiverMasterConfirm.form">
+      <extensionElements>
+        <activiti:formProperty id="type" name="督办事项类型" type="string" writable="false" value="${type}"></activiti:formProperty>
+        <activiti:formProperty id="title" name="标题" type="string" writable="false" value="${title}"></activiti:formProperty>
+        <activiti:formProperty id="describe" name="问题描述" type="string" writable="false" value="${describe}"></activiti:formProperty>
+        <activiti:formProperty id="reply" name="回复问题" type="string" writable="false" value="${reply}"></activiti:formProperty>
+      </extensionElements>
+    </userTask>
     <endEvent id="stopEvent"></endEvent>
-    <userTask id="subordinate" name="下级单位回复" activiti:candidateGroups="下级河长与成员单位" activiti:formKey="SubordinateReply.form"></userTask>
+    <userTask id="subordinate" name="下级单位回复" activiti:candidateGroups="下级河长与成员单位" activiti:formKey="SubordinateReply.form">
+      <extensionElements>
+        <activiti:formProperty id="type" name="督办事项类型" type="string" writable="false" value="${type}"></activiti:formProperty>
+        <activiti:formProperty id="title" name="标题" type="string" writable="false" value="${title}"></activiti:formProperty>
+        <activiti:formProperty id="describe" name="问题描述" type="string" writable="false" value="${describe}"></activiti:formProperty>
+        <activiti:formProperty id="reply" name="回复问题" type="string" required="true"></activiti:formProperty>
+      </extensionElements>
+    </userTask>
     <sequenceFlow id="flow_1" sourceRef="startEvent" targetRef="riverMasterApprove"></sequenceFlow>
     <sequenceFlow id="flow_2" name="确认督办" sourceRef="riverMasterApprove" targetRef="RiverHeadOfficeHandler"></sequenceFlow>
     <sequenceFlow id="flow_3" name="选择回复方式" sourceRef="RiverHeadOfficeHandler" targetRef="sid-55D10423-CA38-4FD2-ABA4-DB9AF56915A1"></sequenceFlow>
