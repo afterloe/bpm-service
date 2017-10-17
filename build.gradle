@@ -1,5 +1,5 @@
 group "cn.cityworks.bpm"
-def artifactId = "demo-1"
+def artifactId = "engine-server"
 version "0.1-DEV"
 
 apply plugin: "java"

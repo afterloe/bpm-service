@@ -11,7 +11,7 @@ server:
 
 spring:
   application:
-    name: "bpm-demo-1"
+    name: "bpm-server"
   datasource:
     driver-class-name: "org.postgresql.Driver"
     url: jdbc:postgresql://${datasource.ip}:${datasource.port}/${datasource.name}?characterEncoding=UTF-8&useSSL=false
@@ -48,9 +48,9 @@ feign:
 info:
   app:
     name: ${spring.application.name}
-    version: v3.0
+    version: v0.0.1
     time: 2017年9月12日21:55:00
-  describe: "soa bpm 流程代码 测试"
+  describe: "soa bpm 流程流程引擎"
   home: /
   author: afterloe.L
   licensed: MIT Licensed
