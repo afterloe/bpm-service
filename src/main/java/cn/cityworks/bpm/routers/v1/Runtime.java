@@ -21,7 +21,7 @@ public class Runtime implements Serializable {
     private cn.cityworks.bpm.services.Runtime runtimeService;
 
     /**
-     * 启动流程次
+     * 启动流程
      *
      * @param processData
      * @return
