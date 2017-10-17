@@ -4,6 +4,7 @@ import cn.cityworks.bpm.services.Runtime;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -14,6 +15,7 @@ import static java.util.stream.Collectors.toList;
 /**
  * create by afterloe on 2017/10/17
  */
+@Service
 public class RuntimeServiceImpl implements Runtime {
 
     @Autowired
