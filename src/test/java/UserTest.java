@@ -1,4 +1,4 @@
-import cn.cityworks.bpm.demo.Launch;
+import cn.cityworks.bpm.Launch;
 import org.activiti.engine.IdentityService;
 import org.activiti.engine.identity.User;
 import org.junit.After;

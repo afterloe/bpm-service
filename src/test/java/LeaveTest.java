@@ -1,4 +1,4 @@
-import cn.cityworks.bpm.demo.Launch;
+import cn.cityworks.bpm.Launch;
 import org.activiti.engine.*;
 import org.activiti.engine.history.HistoricDetail;
 import org.activiti.engine.history.HistoricFormProperty;
