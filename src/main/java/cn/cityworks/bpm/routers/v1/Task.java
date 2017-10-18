@@ -18,6 +18,33 @@ public class Task implements Serializable {
     private cn.cityworks.bpm.services.Task taskService;
 
     /**
+     * 签收任务
+     *
+     * @param taskId
+     * @return
+     */
+    @RequestMapping(value = "claim/{taskId}", method = RequestMethod.PUT)
+    public ResponseDTO claimTask(@PathVariable(value = "taskId") String taskId
+            , @RequestParam(value = "uid") String uid) {
+        Object data = taskService.claimTask(taskId, uid);
+        return ResponseDTO.build(data);
+    }
+
+    /**
+     * 推进流程
+     *
+     * @param processId
+     * @param uid
+     * @return
+     */
+    @RequestMapping(value = "promote/{processId}", method = RequestMethod.PUT)
+    public ResponseDTO promoteProcess(@PathVariable(value = "processId") String processId
+            , @RequestParam(value = "uid") String uid) {
+        Object data = taskService.promoteProcess(processId, uid);
+        return ResponseDTO.build(data);
+    }
+
+    /**
      * 获取指定人的任务列表
      *
      * @param userId

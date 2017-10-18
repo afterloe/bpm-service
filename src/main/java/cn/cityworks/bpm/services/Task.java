@@ -8,6 +8,24 @@ import java.io.Serializable;
 public interface Task extends Serializable, Tools {
 
     /**
+     * 签收任务
+     *
+     * @param taskId
+     * @param uid
+     * @return
+     */
+    Object claimTask(String taskId, String uid);
+
+    /**
+     * 推进流程
+     *
+     * @param processId
+     * @param uid
+     * @return
+     */
+    Object promoteProcess(String processId, String uid);
+
+    /**
      * 获取指定人的任务列表
      *
      * @param userId

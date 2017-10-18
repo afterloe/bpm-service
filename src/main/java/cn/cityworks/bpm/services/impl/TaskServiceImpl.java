@@ -24,6 +24,14 @@ public class TaskServiceImpl implements Task {
     private UserClient userClient;
 
     @Override
+    public Object promoteProcess(String processId, String uid) {
+        org.activiti.engine.task.Task task = taskService.createTaskQuery()
+                .processInstanceId(processId).singleResult();
+
+        return null;
+    }
+
+    @Override
     public Object listTaskByUserId(String userId, int page, int number) {
         return taskService.createTaskQuery().taskAssigneeLike(userId).list().stream()
                 .map(task -> {

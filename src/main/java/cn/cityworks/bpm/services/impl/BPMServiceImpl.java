@@ -51,7 +51,7 @@ public class BPMServiceImpl implements BPMService {
     private RepositoryService repositoryService;
     @Autowired
     private UserClient userClient;
-    
+
     @Override
     public Object completeTask(String access_token, String taskId, Map formData) {
         Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
