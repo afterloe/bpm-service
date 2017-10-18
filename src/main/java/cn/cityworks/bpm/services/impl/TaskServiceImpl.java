@@ -24,6 +24,12 @@ public class TaskServiceImpl implements Task {
     private UserClient userClient;
 
     @Override
+    public Object claimTask(String taskId, String uid) {
+        // TODO
+        return null;
+    }
+
+    @Override
     public Object promoteProcess(String processId, String uid) {
         org.activiti.engine.task.Task task = taskService.createTaskQuery()
                 .processInstanceId(processId).singleResult();
