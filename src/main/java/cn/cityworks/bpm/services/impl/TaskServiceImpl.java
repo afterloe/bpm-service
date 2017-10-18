@@ -25,8 +25,7 @@ public class TaskServiceImpl implements Task {
 
     @Override
     public Object listTaskByUserId(String userId, int page, int number) {
-        return taskService.createTaskQuery()
-                .taskAssigneeLike(userId).list().stream()
+        return taskService.createTaskQuery().taskAssigneeLike(userId).list().stream()
                 .map(task -> {
                     Map repo = new LinkedHashMap();
                     repo.put("name", task.getName());
@@ -52,6 +51,39 @@ public class TaskServiceImpl implements Task {
                 .reduce((d1, d2) -> d1 + d2).orElse(0l);
 
         return taskNumber;
+    }
+
+    @Override
+    public Object listCanSignTaskByGroup(String groupKey, int page, int number) {
+        List<org.activiti.engine.task.Task> list = taskService.createTaskQuery()
+                .taskCandidateGroup(groupKey.toString()).list();
+
+        Map response = new LinkedHashMap();
+
+        int size = list.size();
+        int totalPages = size % number + 1;
+        response.put("totalElements", size);
+        response.put("last", page == totalPages);
+        response.put("totalPages", totalPages);
+        response.put("size", number);
+        response.put("number", page);
+        response.put("numberOfElements", number);
+        response.put("sort", null);
+        response.put("first", page == 1);
+        response.put("content", list.stream().map(task -> {
+            Map repo = new LinkedHashMap();
+            repo.put("name", task.getName());
+            repo.put("id", task.getId());
+            repo.put("processInstanceId", task.getProcessInstanceId());
+            repo.put("assignee", task.getAssignee());
+            repo.put("createTime", task.getCreateTime());
+            repo.put("description", task.getDescription());
+            repo.put("owner", task.getOwner());
+
+            return repo;
+        }).collect(toList()));
+
+        return response;
     }
 
 }

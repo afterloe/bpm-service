@@ -27,18 +27,35 @@ public class Task implements Serializable {
      * @return
      */
     @RequestMapping(value = {"list/{userId}", "list/who"}, method = RequestMethod.GET)
-    public ResponseDTO listTaskByUserId(@PathVariable(value = "userId", required = false) String userId
-            , @RequestParam(value = "userId", required =false) String userId_Path
+    public ResponseDTO listTaskByUserId(@RequestParam(value = "userId", required =false) String userId
+            , @PathVariable(value = "userId", required = false) String userId_Path
             , @RequestParam(value = "page", required = false, defaultValue = "0") int page
             , @RequestParam(value = "number", required = false, defaultValue = "50") int number) {
         Object data = taskService.listTaskByUserId(Optional.ofNullable(userId_Path).orElse(userId), page, number);
         return ResponseDTO.build(data);
     }
 
+    /**
+     * 获取指定人的可签收的任务数量
+     *
+     * @param userId
+     * @param userId_Path
+     * @return
+     */
     @RequestMapping(value = {"count/{userId}", "count"}, method = RequestMethod.GET)
     public ResponseDTO countByCanSignTask(@PathVariable(value = "userId", required = false) String userId
             , @RequestParam(value = "userId", required =false) String userId_Path) {
         Object data = taskService.countByCanSignTask(Optional.ofNullable(userId_Path).orElse(userId));
+        return ResponseDTO.build(data);
+    }
+
+    @RequestMapping(value = {"group/{groupId}/list", "group/list"}, method = RequestMethod.GET)
+    public ResponseDTO listCanSignTaskByGroup(@RequestParam(value = "page", required = false) String groupId
+            , @PathVariable(value = "groupId", required = false) String groupId_Path
+            , @RequestParam(value = "page", required = false, defaultValue = "0") int page
+            , @RequestParam(value = "number", required = false, defaultValue = "50") int number) {
+        Object data = taskService.listCanSignTaskByGroup(
+                Optional.ofNullable(groupId_Path).orElse(groupId), page, number);
         return ResponseDTO.build(data);
     }
 }

@@ -24,4 +24,14 @@ public interface Task extends Serializable, Tools {
      * @return
      */
     Object countByCanSignTask(String userId);
+
+    /**
+     * 获取指定组的可签收任务列表
+     *
+     * @param groupKey
+     * @param page
+     * @param number
+     * @return
+     */
+    Object listCanSignTaskByGroup(String groupKey, int page, int number);
 }
