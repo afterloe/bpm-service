@@ -56,20 +56,21 @@ public class TaskServiceImpl implements Task {
     @Override
     public Object listCanSignTaskByGroup(String groupKey, int page, int number) {
         List<org.activiti.engine.task.Task> list = taskService.createTaskQuery()
-                .taskCandidateGroup(groupKey.toString()).list();
+                .taskCandidateGroup(groupKey.toString()).listPage(page * number, number);
+
+        long size = taskService.createTaskQuery().taskCandidateGroup(groupKey.toString()).count();
+        long totalPages = size % number + 1;
 
         Map response = new LinkedHashMap();
 
-        int size = list.size();
-        int totalPages = size % number + 1;
         response.put("totalElements", size);
-        response.put("last", page == totalPages);
+        response.put("last", page >= totalPages);
         response.put("totalPages", totalPages);
         response.put("size", number);
         response.put("number", page);
         response.put("numberOfElements", number);
         response.put("sort", null);
-        response.put("first", page == 1);
+        response.put("first", page <= 1);
         response.put("content", list.stream().map(task -> {
             Map repo = new LinkedHashMap();
             repo.put("name", task.getName());

@@ -49,6 +49,15 @@ public class Task implements Serializable {
         return ResponseDTO.build(data);
     }
 
+    /**
+     * 获取指定组的可签收任务列表
+     *
+     * @param groupId
+     * @param groupId_Path
+     * @param page
+     * @param number
+     * @return
+     */
     @RequestMapping(value = {"group/{groupId}/list", "group/list"}, method = RequestMethod.GET)
     public ResponseDTO listCanSignTaskByGroup(@RequestParam(value = "page", required = false) String groupId
             , @PathVariable(value = "groupId", required = false) String groupId_Path
