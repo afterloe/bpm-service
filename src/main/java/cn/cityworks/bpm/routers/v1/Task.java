@@ -34,4 +34,11 @@ public class Task implements Serializable {
         Object data = taskService.listTaskByUserId(Optional.ofNullable(userId_Path).orElse(userId), page, number);
         return ResponseDTO.build(data);
     }
+
+    @RequestMapping(value = {"count/{userId}", "count"}, method = RequestMethod.GET)
+    public ResponseDTO countByCanSignTask(@PathVariable(value = "userId", required = false) String userId
+            , @RequestParam(value = "userId", required =false) String userId_Path) {
+        Object data = taskService.countByCanSignTask(Optional.ofNullable(userId_Path).orElse(userId));
+        return ResponseDTO.build(data);
+    }
 }

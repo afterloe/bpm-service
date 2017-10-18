@@ -27,18 +27,6 @@ public class DaPengBPM implements Serializable {
     private String processId;
 
     /**
-     * 上报督办事件
-     *
-     * @return
-     */
-    @RequestMapping(value = "supervisionIncident", method = RequestMethod.POST)
-    public ResponseDTO reportSupervisionIncident(@RequestParam Map<String, String> taskForm
-            , @RequestHeader("access-token") String access_token) {
-        Object data = bpmService.reportSupervisionIncident(processId, taskForm, access_token);
-        return ResponseDTO.build(data);
-    }
-
-    /**
      * 获取待办事项列表
      *
      * @return
