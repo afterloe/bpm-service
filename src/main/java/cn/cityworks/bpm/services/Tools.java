@@ -27,6 +27,11 @@ public interface Tools extends Serializable {
         return (Map)responseMap.get("data");
     };
 
+    /**
+     * 生成uuid
+     *
+     * @return
+     */
     default String getUUID() {
         return UUID.randomUUID().toString().replace("-", "");
     }

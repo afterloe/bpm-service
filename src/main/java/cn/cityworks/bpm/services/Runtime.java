@@ -6,7 +6,7 @@ import java.util.Map;
 /**
  * create by afterloe on 2017/10/17
  */
-public interface Runtime extends Serializable {
+public interface Runtime extends Serializable, Tools {
 
     /**
      * 获取所有启动的流程

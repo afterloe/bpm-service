@@ -2,6 +2,7 @@ package cn.cityworks.bpm.services.impl;
 
 import cn.cityworks.bpm.exceptions.BasicException;
 import cn.cityworks.bpm.services.Runtime;
+import org.activiti.engine.IdentityService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,11 +22,15 @@ public class RuntimeServiceImpl implements Runtime {
 
     @Autowired
     private RuntimeService runtimeService;
+    @Autowired
+    private IdentityService identityService;
 
     @Override
     public Object startProcess(Map processData) {
-        ProcessInstance instance = runtimeService
-                .startProcessInstanceByKey("supervisionIncident", "");
+        checkedParameter(processData, "starter", "processDefinitionKey", "businessKey");
+        identityService.setAuthenticatedUserId(processData.get("starter").toString()); // 设置发起流程的用户
+        ProcessInstance instance = runtimeService.startProcessInstanceByKey(
+                processData.get("processDefinitionKey").toString() ,processData.get("businessKey").toString());
         if (null == instance) {
             throw BasicException.build("start process failed");
         }
