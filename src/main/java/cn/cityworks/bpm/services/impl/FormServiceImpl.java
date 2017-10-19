@@ -8,6 +8,7 @@ import org.activiti.engine.form.FormData;
 import org.activiti.engine.form.StartFormData;
 import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -17,6 +18,7 @@ import static java.util.stream.Collectors.toList;
 /**
  * create by afterloe on 2017/10/17
  */
+@Service
 public class FormServiceImpl implements Form {
 
     @Autowired
