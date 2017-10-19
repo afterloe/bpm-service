@@ -25,7 +25,7 @@ public class Task implements Serializable {
      * @return
      */
     @RequestMapping(value = "promote/{processId}", method = RequestMethod.PUT)
-    public ResponseDTO promoteProcess(@PathVariable(value = "processId") String processId
+    public ResponseDTO completeTask(@PathVariable(value = "processId") String processId
             , @RequestParam Map variables) {
         Object data = taskService.completeTask(processId, variables);
         return ResponseDTO.build(data);

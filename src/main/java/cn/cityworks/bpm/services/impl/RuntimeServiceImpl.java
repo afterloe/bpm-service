@@ -5,7 +5,10 @@ import cn.cityworks.bpm.services.Runtime;
 import org.activiti.engine.FormService;
 import org.activiti.engine.IdentityService;
 import org.activiti.engine.RuntimeService;
+import org.activiti.engine.TaskService;
 import org.activiti.engine.runtime.ProcessInstance;
+import org.activiti.engine.task.Task;
+import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +28,8 @@ public class RuntimeServiceImpl implements Runtime {
     private RuntimeService runtimeService;
     @Autowired
     private IdentityService identityService;
+    @Autowired
+    private TaskService taskService;
 
     @Override
     public Object startProcess(Map processData) {
@@ -35,6 +40,8 @@ public class RuntimeServiceImpl implements Runtime {
         if (null == instance) {
             throw BasicException.build("start process failed");
         }
+        Task task = taskService.createTaskQuery().processInstanceId(instance.getProcessInstanceId())
+                .active().singleResult();
         Map result = new LinkedHashMap();
         result.put("businessKey", instance.getBusinessKey());
         result.put("name", instance.getName());
@@ -43,6 +50,28 @@ public class RuntimeServiceImpl implements Runtime {
         result.put("definitionName", instance.getProcessDefinitionName());
         result.put("definitionId", instance.getProcessDefinitionId());
         result.put("processId", instance.getProcessInstanceId());
+        result.put("activeTaskId", task.getId());
+        return result;
+    }
+
+    @Override
+    public Object getProcessInfo(String processId) {
+        ProcessInstance instance = runtimeService.createProcessInstanceQuery()
+                .processInstanceId(processId).singleResult();
+        if (null == instance) {
+            throw BasicException.build("no such this process instance or this process is over. -> " + processId
+                    , HttpStatus.SC_NOT_FOUND);
+        }
+        Task task = taskService.createTaskQuery().processInstanceId(processId).active().singleResult();
+        Map result = new LinkedHashMap();
+        result.put("businessKey", instance.getBusinessKey());
+        result.put("name", instance.getName());
+        result.put("id", instance.getId());
+        result.put("version", instance.getProcessDefinitionVersion());
+        result.put("definitionName", instance.getProcessDefinitionName());
+        result.put("definitionId", instance.getProcessDefinitionId());
+        result.put("processId", instance.getProcessInstanceId());
+        result.put("activeTaskId", task.getId());
         return result;
     }
 

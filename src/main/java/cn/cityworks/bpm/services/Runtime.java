@@ -24,4 +24,12 @@ public interface Runtime extends Serializable, Tools {
      * @return
      */
     Object startProcess(Map processData);
+
+    /**
+     * 获取流程详细信息
+     *
+     * @param processId
+     * @return
+     */
+    Object getProcessInfo(String processId);
 }

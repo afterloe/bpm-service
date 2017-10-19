@@ -42,4 +42,18 @@ public class Runtime implements Serializable {
         Object data = runtimeService.listActive(page, number);
         return ResponseDTO.build(data);
     }
+
+    /**
+     * 获取流程详细信息
+     *
+     * @param processId
+     * @param uid
+     * @return
+     */
+    @RequestMapping(value = "/{processId}", method = RequestMethod.GET)
+    public ResponseDTO getProcessInfo(@PathVariable(value = "processId") String processId
+            , @RequestParam(value = "uid") String uid) {
+        Object data = runtimeService.getProcessInfo(processId);
+        return ResponseDTO.build(data);
+    }
 }
