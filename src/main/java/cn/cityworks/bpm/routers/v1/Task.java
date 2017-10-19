@@ -33,15 +33,15 @@ public class Task implements Serializable {
     }
 
     /**
-     * 推进流程
+     * 完成任务
      *
-     * @param processId
+     * @param taskId
      * @return
      */
-    @RequestMapping(value = "promote/{processId}", method = RequestMethod.PUT)
-    public ResponseDTO completeTask(@PathVariable(value = "processId") String processId
+    @RequestMapping(value = "complete/{taskId}", method = RequestMethod.PUT)
+    public ResponseDTO completeTask(@PathVariable(value = "taskId") String taskId
             , @RequestParam Map variables) {
-        Object data = taskService.completeTask(processId, variables);
+        Object data = taskService.completeTask(taskId, variables);
         return ResponseDTO.build(data);
     }
 
