@@ -39,6 +39,6 @@ public class RepositoryServiceImpl implements Repository {
             return m;
         }).collect(toList());
 
-        return data;
+        return processList;
     }
 }
