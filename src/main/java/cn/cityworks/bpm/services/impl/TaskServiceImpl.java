@@ -3,6 +3,7 @@ package cn.cityworks.bpm.services.impl;
 import cn.cityworks.bpm.exceptions.BasicException;
 import cn.cityworks.bpm.integrate.UserClient;
 import cn.cityworks.bpm.services.Form;
+import cn.cityworks.bpm.services.Runtime;
 import cn.cityworks.bpm.services.Task;
 import org.activiti.engine.IdentityService;
 import org.activiti.engine.TaskService;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 import static java.util.stream.Collectors.toList;
 
@@ -30,6 +32,26 @@ public class TaskServiceImpl implements Task {
     private IdentityService identityService;
     @Autowired
     private Form form;
+    @Autowired
+    private Runtime runtime;
+
+    /**
+     *  Task 转换为 普通Result VO对象
+     */
+    Function<org.activiti.engine.task.Task, Map> toString = task -> {
+        Map result = new LinkedHashMap();
+        result.put("assignee", task.getAssignee());
+        result.put("name", task.getName());
+        result.put("id", task.getId());
+        result.put("owner", task.getOwner());
+        result.put("localVariables", task.getTaskLocalVariables());
+        result.put("processVariables", task.getProcessVariables());
+        result.put("description", task.getDescription());
+        result.put("createTime", task.getCreateTime());
+        result.put("processInstanceId", task.getProcessInstanceId());
+
+        return result;
+    };
 
     /**
      * 获取任务 公用方法
@@ -48,19 +70,10 @@ public class TaskServiceImpl implements Task {
     @Override
     public Object getTask(String taskId, String uid) {
         org.activiti.engine.task.Task task = getTask(taskId);
-        Map result = new LinkedHashMap();
-        result.put("assignee", task.getAssignee());
-        result.put("name", task.getName());
-        result.put("id", task.getId());
-        result.put("owner", task.getOwner());
-        result.put("localVariables", task.getTaskLocalVariables());
-        result.put("processVariables", task.getProcessVariables());
-        result.put("description", task.getDescription());
-        result.put("createTime", task.getCreateTime());
-        result.put("processInstanceId", task.getProcessInstanceId());
+        Map result = toString.apply(task);
         String formKey = task.getFormKey();
         if (null == formKey) {
-            result.put("formP", form.getTaskFormData(taskId));
+            result.put("formProperties", form.getTaskFormData(taskId));
         } else {
             result.put("formKey", formKey);
         }
@@ -87,7 +100,8 @@ public class TaskServiceImpl implements Task {
                     , HttpStatus.SC_BAD_REQUEST);
         }
         taskService.complete(taskId, variables);
-        return true;
+        task = taskService.createTaskQuery().processInstanceId(task.getProcessInstanceId()).active().singleResult();
+        return null == task ? true: toString.apply(task);
     }
 
     @Override

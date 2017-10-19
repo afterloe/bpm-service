@@ -30,7 +30,6 @@ public interface Task extends Serializable, Tools {
      * 完成任务
      *
      * @param taskId
-     * @param uid
      * @param variables
      * @return
      */
