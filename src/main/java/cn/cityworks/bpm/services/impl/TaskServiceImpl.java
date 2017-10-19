@@ -49,7 +49,6 @@ public class TaskServiceImpl implements Task {
         result.put("description", task.getDescription());
         result.put("createTime", task.getCreateTime());
         result.put("processInstanceId", task.getProcessInstanceId());
-
         return result;
     };
 
