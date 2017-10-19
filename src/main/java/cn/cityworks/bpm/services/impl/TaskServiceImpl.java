@@ -82,10 +82,13 @@ public class TaskServiceImpl implements Task {
     @Override
     public Object claimTask(String taskId, String uid) {
         org.activiti.engine.task.Task task = getTask(taskId);
-        if (null != task.getAssignee()) {
+        String assignee = task.getAssignee();
+        if (null == assignee) {
+            taskService.claim(taskId, uid);
+        }
+        if (!assignee.equals(uid)) {
             throw BasicException.build("task has been assigned");
         }
-        taskService.claim(taskId, uid);
         return true;
     }
 
