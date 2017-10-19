@@ -1,6 +1,7 @@
 package cn.cityworks.bpm.services;
 
 import java.io.Serializable;
+import java.util.Map;
 
 /**
  * create by afterloe on 2017/10/17
@@ -17,13 +18,14 @@ public interface Task extends Serializable, Tools {
     Object claimTask(String taskId, String uid);
 
     /**
-     * 推进流程
+     * 完成任务
      *
-     * @param processId
+     * @param taskId
      * @param uid
+     * @param variables
      * @return
      */
-    Object promoteProcess(String processId, String uid);
+    Object completeTask(String taskId, Map variables);
 
     /**
      * 获取指定人的任务列表

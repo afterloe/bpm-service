@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.Serializable;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -18,6 +19,19 @@ public class Task implements Serializable {
     private cn.cityworks.bpm.services.Task taskService;
 
     /**
+     * 推进流程
+     *
+     * @param processId
+     * @return
+     */
+    @RequestMapping(value = "promote/{processId}", method = RequestMethod.PUT)
+    public ResponseDTO promoteProcess(@PathVariable(value = "processId") String processId
+            , @RequestParam Map variables) {
+        Object data = taskService.completeTask(processId, variables);
+        return ResponseDTO.build(data);
+    }
+
+    /**
      * 签收任务
      *
      * @param taskId
@@ -27,20 +41,6 @@ public class Task implements Serializable {
     public ResponseDTO claimTask(@PathVariable(value = "taskId") String taskId
             , @RequestParam(value = "uid") String uid) {
         Object data = taskService.claimTask(taskId, uid);
-        return ResponseDTO.build(data);
-    }
-
-    /**
-     * 推进流程
-     *
-     * @param processId
-     * @param uid
-     * @return
-     */
-    @RequestMapping(value = "promote/{processId}", method = RequestMethod.PUT)
-    public ResponseDTO promoteProcess(@PathVariable(value = "processId") String processId
-            , @RequestParam(value = "uid") String uid) {
-        Object data = taskService.promoteProcess(processId, uid);
         return ResponseDTO.build(data);
     }
 

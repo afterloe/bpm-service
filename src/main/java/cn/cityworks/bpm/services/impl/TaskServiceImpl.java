@@ -1,8 +1,11 @@
 package cn.cityworks.bpm.services.impl;
 
+import cn.cityworks.bpm.exceptions.BasicException;
 import cn.cityworks.bpm.integrate.UserClient;
 import cn.cityworks.bpm.services.Task;
+import org.activiti.engine.IdentityService;
 import org.activiti.engine.TaskService;
+import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,19 +25,30 @@ public class TaskServiceImpl implements Task {
     private TaskService taskService;
     @Autowired
     private UserClient userClient;
+    @Autowired
+    private IdentityService identityService;
 
     @Override
     public Object claimTask(String taskId, String uid) {
-        // TODO
-        return null;
+        org.activiti.engine.task.Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+        if (null != task.getAssignee()) {
+            throw BasicException.build("task has been assigned");
+        }
+        taskService.claim(taskId, uid);
+        return true;
     }
 
     @Override
-    public Object promoteProcess(String processId, String uid) {
-        org.activiti.engine.task.Task task = taskService.createTaskQuery()
-                .processInstanceId(processId).singleResult();
-
-        return null;
+    public Object completeTask(String taskId, Map variables) {
+        checkedParameter(variables, "uid");
+        String uid = variables.remove("uid").toString();
+        org.activiti.engine.task.Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+        if (!uid.equals(task.getAssignee())) {
+            throw BasicException.build("this task has not been assigned to you. please sign this task ..."
+                    , HttpStatus.SC_BAD_REQUEST);
+        }
+        taskService.complete(taskId, variables);
+        return true;
     }
 
     @Override
