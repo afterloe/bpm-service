@@ -9,6 +9,15 @@ import java.util.Map;
 public interface Task extends Serializable, Tools {
 
     /**
+     * 获取任务详情
+     *
+     * @param taskId
+     * @param uid
+     * @return
+     */
+    Object getTask(String taskId, String uid);
+
+    /**
      * 签收任务
      *
      * @param taskId

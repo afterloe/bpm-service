@@ -51,9 +51,9 @@ public class Runtime implements Serializable {
      * @return
      */
     @RequestMapping(value = "/{processId}", method = RequestMethod.GET)
-    public ResponseDTO getProcessInfo(@PathVariable(value = "processId") String processId
+    public ResponseDTO getProcess(@PathVariable(value = "processId") String processId
             , @RequestParam(value = "uid") String uid) {
-        Object data = runtimeService.getProcessInfo(processId);
+        Object data = runtimeService.getProcess(processId);
         return ResponseDTO.build(data);
     }
 }

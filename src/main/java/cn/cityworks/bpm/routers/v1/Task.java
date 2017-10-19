@@ -19,6 +19,20 @@ public class Task implements Serializable {
     private cn.cityworks.bpm.services.Task taskService;
 
     /**
+     * 获取任务详情
+     *
+     * @param taskId
+     * @param uid
+     * @return
+     */
+    @RequestMapping(value = "/{taskId}", method = RequestMethod.GET)
+    public ResponseDTO getTask(@PathVariable(value = "taskId") String taskId
+            , @RequestParam(value = "uid") String uid) {
+        Object data = taskService.getTask(taskId, uid);
+        return ResponseDTO.build(data);
+    }
+
+    /**
      * 推进流程
      *
      * @param processId

@@ -2,6 +2,7 @@ package cn.cityworks.bpm.services.impl;
 
 import cn.cityworks.bpm.exceptions.BasicException;
 import cn.cityworks.bpm.integrate.UserClient;
+import cn.cityworks.bpm.services.Form;
 import cn.cityworks.bpm.services.Task;
 import org.activiti.engine.IdentityService;
 import org.activiti.engine.TaskService;
@@ -27,10 +28,48 @@ public class TaskServiceImpl implements Task {
     private UserClient userClient;
     @Autowired
     private IdentityService identityService;
+    @Autowired
+    private Form form;
+
+    /**
+     * 获取任务 公用方法
+     *
+     * @param taskId
+     * @return
+     */
+    private org.activiti.engine.task.Task getTask(String taskId) {
+        org.activiti.engine.task.Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+        if (null == task) {
+            throw BasicException.build("no such this task! -> " + taskId, HttpStatus.SC_NOT_FOUND);
+        }
+        return  task;
+    }
+
+    @Override
+    public Object getTask(String taskId, String uid) {
+        org.activiti.engine.task.Task task = getTask(taskId);
+        Map result = new LinkedHashMap();
+        result.put("assignee", task.getAssignee());
+        result.put("name", task.getName());
+        result.put("id", task.getId());
+        result.put("owner", task.getOwner());
+        result.put("localVariables", task.getTaskLocalVariables());
+        result.put("processVariables", task.getProcessVariables());
+        result.put("description", task.getDescription());
+        result.put("createTime", task.getCreateTime());
+        result.put("processInstanceId", task.getProcessInstanceId());
+        String formKey = task.getFormKey();
+        if (null == formKey) {
+            result.put("formP", form.getTaskFormData(taskId));
+        } else {
+            result.put("formKey", formKey);
+        }
+        return result;
+    }
 
     @Override
     public Object claimTask(String taskId, String uid) {
-        org.activiti.engine.task.Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+        org.activiti.engine.task.Task task = getTask(taskId);
         if (null != task.getAssignee()) {
             throw BasicException.build("task has been assigned");
         }
@@ -42,7 +81,7 @@ public class TaskServiceImpl implements Task {
     public Object completeTask(String taskId, Map variables) {
         checkedParameter(variables, "uid");
         String uid = variables.remove("uid").toString();
-        org.activiti.engine.task.Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+        org.activiti.engine.task.Task task = getTask(taskId);
         if (!uid.equals(task.getAssignee())) {
             throw BasicException.build("this task has not been assigned to you. please sign this task ..."
                     , HttpStatus.SC_BAD_REQUEST);

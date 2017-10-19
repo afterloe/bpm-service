@@ -22,6 +22,14 @@ public interface Form extends Serializable {
     Object getStartFormData(String processId);
 
     /**
+     * 获取任务表单
+     *
+     * @param taskId
+     * @return
+     */
+    Object getTaskFormData(String taskId);
+
+    /**
      * 处理FormProperty 数据 [能够写成JSON发送]
      */
     Function<FormProperty, Map> handlerFormProperty = item -> {

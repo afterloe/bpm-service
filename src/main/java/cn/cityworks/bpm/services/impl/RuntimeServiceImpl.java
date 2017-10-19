@@ -55,7 +55,7 @@ public class RuntimeServiceImpl implements Runtime {
     }
 
     @Override
-    public Object getProcessInfo(String processId) {
+    public Object getProcess(String processId) {
         ProcessInstance instance = runtimeService.createProcessInstanceQuery()
                 .processInstanceId(processId).singleResult();
         if (null == instance) {

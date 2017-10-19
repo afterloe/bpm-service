@@ -4,6 +4,7 @@ import cn.cityworks.bpm.config.Dictionaries;
 import cn.cityworks.bpm.exceptions.BasicException;
 import cn.cityworks.bpm.services.Form;
 import org.activiti.engine.FormService;
+import org.activiti.engine.form.FormData;
 import org.activiti.engine.form.StartFormData;
 import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,5 +39,11 @@ public class FormServiceImpl implements Form {
                     .map(handlerFormProperty).collect(toList()));
         }
         return result;
+    }
+
+    @Override
+    public Object getTaskFormData(String taskId) {
+        FormData formData = formService.getTaskFormData(taskId);
+        return formData.getFormProperties().stream().map(handlerFormProperty).collect(toList());
     }
 }

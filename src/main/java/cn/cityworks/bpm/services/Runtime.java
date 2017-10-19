@@ -31,5 +31,5 @@ public interface Runtime extends Serializable, Tools {
      * @param processId
      * @return
      */
-    Object getProcessInfo(String processId);
+    Object getProcess(String processId);
 }
