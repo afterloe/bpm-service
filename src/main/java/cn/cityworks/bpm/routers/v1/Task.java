@@ -117,9 +117,23 @@ public class Task implements Serializable {
      * @return
      */
     @RequestMapping(value = {"process/{processId}/list", "process/list"}, method = RequestMethod.GET)
-    public ResponseDTO listByProcess(@RequestParam(value = "page", required = false) String processId
+    public ResponseDTO listByProcess(@RequestParam(value = "processId", required = false) String processId
             , @PathVariable(value = "processId", required = false) String processId_Path) {
         Object data = taskService.listByProcess(Optional.ofNullable(processId_Path).orElse(processId));
+        return ResponseDTO.build(data);
+    }
+
+    /**
+     * 获取业务key下的任务列表
+     *
+     * @param businessKey
+     * @param businessKey_Path
+     * @return
+     */
+    @RequestMapping(value = {"businessKey/{businessKey}/list", "businessKey/list"}, method = RequestMethod.GET)
+    public ResponseDTO listByBusinessKey(@RequestParam(value = "businessKey", required = false) String businessKey
+            , @PathVariable(value = "businessKey", required = false) String businessKey_Path) {
+        Object data = taskService.listByBusinessKey(Optional.ofNullable(businessKey_Path).orElse(businessKey));
         return ResponseDTO.build(data);
     }
 }

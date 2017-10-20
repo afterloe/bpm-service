@@ -19,6 +19,14 @@ public interface Task extends Serializable, Tools {
     Object listByProcess(String processId);
 
     /**
+     * 获取业务key下所有的任务列表
+     *
+     * @param businessKey
+     * @return
+     */
+    Object listByBusinessKey(String businessKey);
+
+    /**
      * 获取任务详情
      *
      * @param taskId

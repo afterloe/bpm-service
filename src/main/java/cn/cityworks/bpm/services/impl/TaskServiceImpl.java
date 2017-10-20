@@ -91,6 +91,15 @@ public class TaskServiceImpl implements Task {
     }
 
     @Override
+    public Object listByBusinessKey(String businessKey) {
+        List taskList = taskService.createTaskQuery().processInstanceBusinessKey(businessKey).list();
+        if (0 == taskList.size()) {
+            taskList = historyService.createHistoricTaskInstanceQuery().processInstanceBusinessKey(businessKey).list();
+        }
+        return taskList.stream().map(task -> printTask(task)).collect(toList());
+    }
+
+    @Override
     public Object getTask(String taskId, String uid) {
         org.activiti.engine.task.Task task = getTask(taskId);
         Map result = toString.apply(task);
