@@ -29,4 +29,18 @@ public class Process implements Serializable {
         Object data = processService.getProcess(processId);
         return ResponseDTO.build(data);
     }
+
+    /**
+     * 通过业务key 获取工作流实例
+     *
+     * @param businessKey
+     * @param uid
+     * @return
+     */
+    @RequestMapping(value = "list/byBusinessKey/{businessKey}", method = RequestMethod.GET)
+    public ResponseDTO listByBusinessKey(@PathVariable(value = "businessKey") String businessKey
+            , @RequestParam(value = "uid") String uid) {
+        Object data = processService.listByBusinessKey(businessKey);
+        return ResponseDTO.build(data);
+    }
 }

@@ -44,15 +44,21 @@ public class RuntimeServiceImpl implements Runtime {
         if (null == instance) {
             throw BasicException.build("start process failed");
         }
-        return toVO(instance);
-    }
+        Map result = new LinkedHashMap();
+        Task task = taskService.createTaskQuery().processInstanceId(instance.getProcessInstanceId())
+                .active().singleResult();
+        result.put("type", "activeProcess");
+        result.put("businessKey", instance.getBusinessKey());
+        result.put("name", instance.getName());
+        result.put("id", instance.getId());
+        result.put("version", instance.getProcessDefinitionVersion());
+        result.put("definitionName", instance.getProcessDefinitionName());
+        result.put("definitionId", instance.getProcessDefinitionId());
+        result.put("processId", instance.getProcessInstanceId());
+        result.put("activeTaskId", task.getId());
+        result.put("activeTaskInfo", cn.cityworks.bpm.services.Task.toString.apply(task));
 
-    @Override
-    public Object listByBusinessKey(String businessKey) {
-        List<ProcessInstance> list = runtimeService.createProcessInstanceQuery()
-                .processInstanceBusinessKey(businessKey).list();
-
-        return list.stream().map(processInstance -> toVO(processInstance)).collect(toList());
+        return result;
     }
 
     @Override

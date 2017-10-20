@@ -1,7 +1,9 @@
 package cn.cityworks.bpm.services;
 
 import java.io.Serializable;
+import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.function.Function;
 
 /**
  * create by afterloe on 2017/10/17
@@ -62,4 +64,14 @@ public interface Task extends Serializable, Tools {
      * @return
      */
     Object listCanSignTaskByGroup(String groupKey, int page, int number);
+
+    Function<org.activiti.engine.task.Task, Map> toString = task -> {
+        Map result = new LinkedHashMap();
+        result.put("name", task.getName());
+        result.put("assignee", task.getAssignee());
+        result.put("owner", task.getOwner());
+        result.put("description", task.getDescription());
+        result.put("createTime", task.getCreateTime());
+        return result;
+    };
 }

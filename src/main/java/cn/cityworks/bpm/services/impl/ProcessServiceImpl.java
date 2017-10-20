@@ -12,8 +12,11 @@ import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
+
+import static java.util.stream.Collectors.toList;
 
 /**
  * create by afterloe on 2017/10/20
@@ -35,6 +38,16 @@ public class ProcessServiceImpl implements Process {
             return getHistoryProcess(processId);
         }
         return printProcess(instance);
+    }
+
+    @Override
+    public Object listByBusinessKey(String businessKey) {
+        List activeList = runtimeService.createProcessInstanceQuery()
+                .processInstanceBusinessKey(businessKey).list();
+        List historicList = historyService.createHistoricProcessInstanceQuery()
+                .processInstanceBusinessKey(businessKey).list();
+        activeList.addAll(historicList);
+        return activeList.stream().map(processInstance -> printProcess(processInstance)).collect(toList());
     }
 
     private Object getHistoryProcess(String processId) {
@@ -62,7 +75,7 @@ public class ProcessServiceImpl implements Process {
             result.put("definitionId", instance.getProcessDefinitionId());
             result.put("processId", instance.getProcessInstanceId());
             result.put("activeTaskId", task.getId());
-            result.put("activeTaskInfo", toString.apply(task));
+            result.put("activeTaskInfo", cn.cityworks.bpm.services.Task.toString.apply(task));
             return result;
         }
 
@@ -87,17 +100,4 @@ public class ProcessServiceImpl implements Process {
         }
         throw BasicException.build("this type of process is not support.");
     }
-
-    /**
-     *  Task 转换为 普通Result VO对象
-     */
-    private Function<Task, Map> toString = task -> {
-        Map result = new LinkedHashMap();
-        result.put("name", task.getName());
-        result.put("assignee", task.getAssignee());
-        result.put("owner", task.getOwner());
-        result.put("description", task.getDescription());
-        result.put("createTime", task.getCreateTime());
-        return result;
-    };
 }

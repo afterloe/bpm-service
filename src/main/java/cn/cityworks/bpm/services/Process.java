@@ -11,4 +11,12 @@ public interface Process extends Serializable {
      * @return
      */
     Object getProcess(String processId);
+
+    /**
+     * 通过业务key 获取工作流实例
+     *
+     * @param businessKey
+     * @return
+     */
+    Object listByBusinessKey(String businessKey);
 }
