@@ -3,6 +3,7 @@ package cn.cityworks.bpm.services.impl;
 import cn.cityworks.bpm.services.History;
 import org.activiti.engine.HistoryService;
 import org.activiti.engine.TaskService;
+import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.task.Task;
 import org.slf4j.Logger;
@@ -32,7 +33,8 @@ public class HistoryServiceImpl implements History {
     @Override
     public Object getProcess(String processId) {
         Task task = taskService.createTaskQuery().processInstanceId(processId).active().singleResult(); // 当前任务
-        List<HistoricTaskInstance> historyTaskList = historyService.createHistoricTaskInstanceQuery().processInstanceId(task.getProcessInstanceId()).list();
+        List<HistoricTaskInstance> historyTaskList = historyService.createHistoricTaskInstanceQuery()
+                .processInstanceId(task.getProcessInstanceId()).list();
         return historyTaskList.stream().map(historicTask -> {
             Map result = new LinkedHashMap();
             result.put("startTime", historicTask.getStartTime());
@@ -41,6 +43,20 @@ public class HistoryServiceImpl implements History {
             result.put("workerTime", historicTask.getWorkTimeInMillis());
             result.put("name", historicTask.getName());
             result.put("claimTime", historicTask.getClaimTime());
+            return result;
+        }).collect(toList());
+    }
+
+    @Override
+    public Object listByBusinessKey(String businessKey) {
+        List<HistoricProcessInstance> historyProcessInstanceList = historyService.createHistoricProcessInstanceQuery()
+                .processInstanceBusinessKey(businessKey).list();
+        return historyProcessInstanceList.stream().map(historyProcessInstance -> {
+            Map result = new LinkedHashMap();
+            result.put("startTime", historyProcessInstance.getStartTime());
+            result.put("endTime", historyProcessInstance.getEndTime());
+            result.put("durationInMillis", historyProcessInstance.getDurationInMillis());
+            result.put("starter", historyProcessInstance.getStartUserId());
             return result;
         }).collect(toList());
     }
