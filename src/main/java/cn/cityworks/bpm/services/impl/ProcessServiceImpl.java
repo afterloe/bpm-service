@@ -43,12 +43,13 @@ public class ProcessServiceImpl implements Process {
 
     @Override
     public Object listByBusinessKey(String businessKey) {
-        List activeList = runtimeService.createProcessInstanceQuery()
+        List list = runtimeService.createProcessInstanceQuery()
                 .processInstanceBusinessKey(businessKey).list();
-        List historicList = historyService.createHistoricProcessInstanceQuery()
-                .processInstanceBusinessKey(businessKey).list();
-        activeList.addAll(historicList);
-        return activeList.stream().map(processInstance -> printProcess(processInstance)).collect(toList());
+        if (0 == list.size()) {
+            list = historyService.createHistoricProcessInstanceQuery()
+                    .processInstanceBusinessKey(businessKey).list();
+        }
+        return list.stream().map(processInstance -> printProcess(processInstance)).collect(toList());
     }
 
     private Object getHistoryProcess(String processId) {
@@ -96,7 +97,7 @@ public class ProcessServiceImpl implements Process {
             result.put("startTime", instance.getStartTime());
             result.put("endTime", instance.getEndTime());
             result.put("workerTime", instance.getDurationInMillis());
-            result.put("claimTime", instance.getProcessVariables());
+            result.put("processVariables", instance.getProcessVariables());
             return result;
         }
         throw BasicException.build("this type of process is not support.");

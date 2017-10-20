@@ -32,9 +32,8 @@ public class HistoryServiceImpl implements History {
 
     @Override
     public Object getProcess(String processId) {
-        Task task = taskService.createTaskQuery().processInstanceId(processId).active().singleResult(); // 当前任务
         List<HistoricTaskInstance> historyTaskList = historyService.createHistoricTaskInstanceQuery()
-                .processInstanceId(task.getProcessInstanceId()).list();
+                .processInstanceId(processId).list();
         return historyTaskList.stream().map(historicTask -> {
             Map result = new LinkedHashMap();
             result.put("startTime", historicTask.getStartTime());
