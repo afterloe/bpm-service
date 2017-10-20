@@ -18,7 +18,7 @@ public interface Runtime extends Serializable, Tools {
     Object listActive(int page, int number);
 
     /**
-     * 启动流程次
+     * 启动流程
      * 
      * @param processData
      * @return
