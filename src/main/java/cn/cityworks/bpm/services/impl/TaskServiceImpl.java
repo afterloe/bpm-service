@@ -38,7 +38,7 @@ public class TaskServiceImpl implements Task {
     /**
      *  Task 转换为 普通Result VO对象
      */
-    Function<org.activiti.engine.task.Task, Map> toString = task -> {
+    private Function<org.activiti.engine.task.Task, Map> toString = task -> {
         Map result = new LinkedHashMap();
         result.put("assignee", task.getAssignee());
         result.put("name", task.getName());
