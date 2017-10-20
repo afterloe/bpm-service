@@ -11,6 +11,14 @@ import java.util.function.Function;
 public interface Task extends Serializable, Tools {
 
     /**
+     * 获取流程下的任务列表
+     *
+     * @param processId
+     * @return
+     */
+    Object listByProcess(String processId);
+
+    /**
      * 获取任务详情
      *
      * @param taskId
@@ -70,6 +78,7 @@ public interface Task extends Serializable, Tools {
      */
     Function<org.activiti.engine.task.Task, Map> toString = task -> {
         Map result = new LinkedHashMap();
+        result.put("type", "activeTask");
         result.put("name", task.getName());
         result.put("dueDate", task.getDueDate());
         result.put("localVariables", task.getTaskLocalVariables());

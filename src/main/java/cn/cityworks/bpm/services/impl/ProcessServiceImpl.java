@@ -96,7 +96,7 @@ public class ProcessServiceImpl implements Process {
             result.put("processId", instance.getId());
             result.put("startTime", instance.getStartTime());
             result.put("endTime", instance.getEndTime());
-            result.put("workerTime", instance.getDurationInMillis());
+            result.put("durationInMillis", instance.getDurationInMillis());
             result.put("processVariables", instance.getProcessVariables());
             return result;
         }

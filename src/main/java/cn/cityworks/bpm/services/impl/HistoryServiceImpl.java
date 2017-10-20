@@ -45,18 +45,4 @@ public class HistoryServiceImpl implements History {
             return result;
         }).collect(toList());
     }
-
-    @Override
-    public Object listByBusinessKey(String businessKey) {
-        List<HistoricProcessInstance> historyProcessInstanceList = historyService.createHistoricProcessInstanceQuery()
-                .processInstanceBusinessKey(businessKey).list();
-        return historyProcessInstanceList.stream().map(historyProcessInstance -> {
-            Map result = new LinkedHashMap();
-            result.put("startTime", historyProcessInstance.getStartTime());
-            result.put("endTime", historyProcessInstance.getEndTime());
-            result.put("durationInMillis", historyProcessInstance.getDurationInMillis());
-            result.put("starter", historyProcessInstance.getStartUserId());
-            return result;
-        }).collect(toList());
-    }
 }

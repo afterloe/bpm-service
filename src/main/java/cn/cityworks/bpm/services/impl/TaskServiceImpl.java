@@ -5,8 +5,10 @@ import cn.cityworks.bpm.integrate.UserClient;
 import cn.cityworks.bpm.services.Form;
 import cn.cityworks.bpm.services.Runtime;
 import cn.cityworks.bpm.services.Task;
+import org.activiti.engine.HistoryService;
 import org.activiti.engine.IdentityService;
 import org.activiti.engine.TaskService;
+import org.activiti.engine.history.HistoricTaskInstance;
 import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,26 +33,11 @@ public class TaskServiceImpl implements Task {
     @Autowired
     private IdentityService identityService;
     @Autowired
+    private HistoryService historyService;
+    @Autowired
     private Form form;
     @Autowired
     private Runtime runtime;
-
-    /**
-     *  Task 转换为 普通Result VO对象
-     */
-    private Function<org.activiti.engine.task.Task, Map> toString = task -> {
-        Map result = new LinkedHashMap();
-        result.put("assignee", task.getAssignee());
-        result.put("name", task.getName());
-        result.put("id", task.getId());
-        result.put("owner", task.getOwner());
-        result.put("localVariables", task.getTaskLocalVariables());
-        result.put("processVariables", task.getProcessVariables());
-        result.put("description", task.getDescription());
-        result.put("createTime", task.getCreateTime());
-        result.put("processInstanceId", task.getProcessInstanceId());
-        return result;
-    };
 
     /**
      * 获取任务 公用方法
@@ -64,6 +51,43 @@ public class TaskServiceImpl implements Task {
             throw BasicException.build("no such this task! -> " + taskId, HttpStatus.SC_NOT_FOUND);
         }
         return  task;
+    }
+
+    private Map printTask(Object task) {
+        if (task instanceof org.activiti.engine.task.Task) {
+            return Task.toString.apply((org.activiti.engine.task.Task)task);
+        }
+
+        return printHistoryTask(task);
+    }
+
+    private Map printHistoryTask(Object task) {
+        if (task instanceof HistoricTaskInstance ) {
+            HistoricTaskInstance taskInstance = (HistoricTaskInstance) task;
+            Map result = new LinkedHashMap();
+            result.put("type", "historicTask");
+            result.put("name", taskInstance.getName());
+            result.put("dueDate", taskInstance.getDueDate());
+            result.put("localVariables", taskInstance.getTaskLocalVariables());
+            result.put("processVariables",taskInstance.getProcessVariables());
+            result.put("assignee", taskInstance.getAssignee());
+            result.put("owner", taskInstance.getOwner());
+            result.put("description", taskInstance.getDescription());
+            result.put("createTime", taskInstance.getCreateTime());
+            result.put("workTime", taskInstance.getWorkTimeInMillis());
+            result.put("deleteReason", taskInstance.getDeleteReason());
+            return result;
+        }
+        throw BasicException.build("this type of task is not support.");
+    }
+
+    @Override
+    public Object listByProcess(String processId) {
+        List taskList = taskService.createTaskQuery().processInstanceId(processId).list();
+        if (0 == taskList.size()) {
+            taskList = historyService.createHistoricTaskInstanceQuery().processInstanceId(processId).list();
+        }
+        return taskList.stream().map(task -> printTask(task)).collect(toList());
     }
 
     @Override

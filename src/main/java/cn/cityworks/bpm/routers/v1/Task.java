@@ -104,8 +104,22 @@ public class Task implements Serializable {
             , @PathVariable(value = "groupId", required = false) String groupId_Path
             , @RequestParam(value = "page", required = false, defaultValue = "0") int page
             , @RequestParam(value = "number", required = false, defaultValue = "50") int number) {
-        Object data = taskService.listCanSignTaskByGroup(
-                Optional.ofNullable(groupId_Path).orElse(groupId), page, number);
+        Object data = taskService.listCanSignTaskByGroup(Optional.ofNullable(groupId_Path).orElse(groupId)
+                , page, number);
+        return ResponseDTO.build(data);
+    }
+
+    /**
+     * 获取流程下的任务列表
+     *
+     * @param processId
+     * @param processId_Path
+     * @return
+     */
+    @RequestMapping(value = {"process/{processId}/list", "process/list"}, method = RequestMethod.GET)
+    public ResponseDTO listByProcess(@RequestParam(value = "page", required = false) String processId
+            , @PathVariable(value = "processId", required = false) String processId_Path) {
+        Object data = taskService.listByProcess(Optional.ofNullable(processId_Path).orElse(processId));
         return ResponseDTO.build(data);
     }
 }
