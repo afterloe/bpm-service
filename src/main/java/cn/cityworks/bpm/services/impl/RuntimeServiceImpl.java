@@ -35,28 +35,6 @@ public class RuntimeServiceImpl implements Runtime {
     @Autowired
     private History historyImpl;
 
-    /**
-     * 转换数据对象
-     *
-     * @param instance
-     * @return
-     */
-    private Map toVO(ProcessInstance instance) {
-        Task task = taskService.createTaskQuery().processInstanceId(instance.getProcessInstanceId())
-                .active().singleResult();
-        Map result = new LinkedHashMap();
-        result.put("businessKey", instance.getBusinessKey());
-        result.put("name", instance.getName());
-        result.put("id", instance.getId());
-        result.put("version", instance.getProcessDefinitionVersion());
-        result.put("definitionName", instance.getProcessDefinitionName());
-        result.put("definitionId", instance.getProcessDefinitionId());
-        result.put("processId", instance.getProcessInstanceId());
-        result.put("activeTaskId", task.getId());
-        result.put("activeTaskInfo", toString.apply(task));
-        return result;
-    }
-
     @Override
     public Object startProcess(Map processData) {
         checkedParameter(processData, "starter", "processDefinitionKey", "businessKey");
@@ -67,19 +45,6 @@ public class RuntimeServiceImpl implements Runtime {
             throw BasicException.build("start process failed");
         }
         return toVO(instance);
-    }
-
-    @Override
-    public Object getProcess(String processId) {
-        ProcessInstance instance = runtimeService.createProcessInstanceQuery()
-                .processInstanceId(processId).singleResult();
-        if (null == instance) {
-            throw BasicException.build("no such this process instance or this process is over. -> " + processId
-                    , HttpStatus.SC_NOT_FOUND);
-        }
-        Map processInfo = toVO(instance);
-        processInfo.put("historyTasks", historyImpl.getProcess(processId));
-        return processInfo;
     }
 
     @Override
@@ -101,17 +66,4 @@ public class RuntimeServiceImpl implements Runtime {
             return m;
         }).collect(toList());
     }
-
-    /**
-     *  Task 转换为 普通Result VO对象
-     */
-    private Function<Task, Map> toString = task -> {
-        Map result = new LinkedHashMap();
-        result.put("name", task.getName());
-        result.put("assignee", task.getAssignee());
-        result.put("owner", task.getOwner());
-        result.put("description", task.getDescription());
-        result.put("createTime", task.getCreateTime());
-        return result;
-    };
 }

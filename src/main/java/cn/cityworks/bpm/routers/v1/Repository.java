@@ -27,8 +27,7 @@ public class Repository implements Serializable {
      * @return
      */
     @RequestMapping(value = "list", method = RequestMethod.GET)
-    public ResponseDTO listDeveloperProcess(
-            @RequestParam(value = "page", required = false, defaultValue = "0") int page
+    public ResponseDTO listDeveloperProcess(@RequestParam(value = "page", required = false, defaultValue = "0") int page
             , @RequestParam(value = "number", required = false, defaultValue = "50") int number) {
         Object data = repositoryService.listDeveloperProcess(page, number);
         return ResponseDTO.build(data);
