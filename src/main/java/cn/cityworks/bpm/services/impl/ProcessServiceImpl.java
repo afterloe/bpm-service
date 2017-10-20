@@ -10,17 +10,18 @@ import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
 import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 
 import static java.util.stream.Collectors.toList;
 
 /**
  * create by afterloe on 2017/10/20
  */
+@Service
 public class ProcessServiceImpl implements Process {
 
     @Autowired

@@ -65,9 +65,15 @@ public interface Task extends Serializable, Tools {
      */
     Object listCanSignTaskByGroup(String groupKey, int page, int number);
 
+    /**
+     * 输出task信息
+     */
     Function<org.activiti.engine.task.Task, Map> toString = task -> {
         Map result = new LinkedHashMap();
         result.put("name", task.getName());
+        result.put("dueDate", task.getDueDate());
+        result.put("localVariables", task.getTaskLocalVariables());
+        result.put("processVariables",task.getProcessVariables());
         result.put("assignee", task.getAssignee());
         result.put("owner", task.getOwner());
         result.put("description", task.getDescription());
