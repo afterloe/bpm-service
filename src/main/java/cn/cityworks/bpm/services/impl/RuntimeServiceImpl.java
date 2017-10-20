@@ -1,6 +1,7 @@
 package cn.cityworks.bpm.services.impl;
 
 import cn.cityworks.bpm.exceptions.BasicException;
+import cn.cityworks.bpm.services.History;
 import cn.cityworks.bpm.services.Runtime;
 import org.activiti.engine.FormService;
 import org.activiti.engine.IdentityService;
@@ -31,6 +32,8 @@ public class RuntimeServiceImpl implements Runtime {
     private IdentityService identityService;
     @Autowired
     private TaskService taskService;
+    @Autowired
+    private History historyImpl;
 
     /**
      * 转换数据对象
@@ -74,7 +77,17 @@ public class RuntimeServiceImpl implements Runtime {
             throw BasicException.build("no such this process instance or this process is over. -> " + processId
                     , HttpStatus.SC_NOT_FOUND);
         }
-        return toVO(instance);
+        Map processInfo = toVO(instance);
+        processInfo.put("historyTasks", historyImpl.getProcess(processId));
+        return processInfo;
+    }
+
+    @Override
+    public Object listByBusinessKey(String businessKey) {
+        List<ProcessInstance> list = runtimeService.createProcessInstanceQuery()
+                .processInstanceBusinessKey(businessKey).list();
+
+        return list.stream().map(processInstance -> toVO(processInstance)).collect(toList());
     }
 
     @Override
