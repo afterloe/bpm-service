@@ -1,5 +1,4 @@
 datasource:
-  # ip: "192.168.0.110"
   ip: "172.30.128.4"
   port: 5432
   name: "centos"
@@ -61,7 +60,7 @@ developer:
 
 eureka:
   instance:
-    ip-address: 172.16.1.10
+#    ip-address: 172.16.1.10
     preferIpAddress: true
     instance-id: ${spring.cloud.client.ipAddress}:${server.port}
     nonSecurePort: ${server.port:8080}
