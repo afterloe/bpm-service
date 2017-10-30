@@ -86,6 +86,7 @@ public interface Task extends Serializable, Tools {
      */
     Function<org.activiti.engine.task.Task, Map> toString = task -> {
         Map result = new LinkedHashMap();
+        result.put("id", task.getId());
         result.put("type", "activeTask");
         result.put("name", task.getName());
         result.put("dueDate", task.getDueDate());
