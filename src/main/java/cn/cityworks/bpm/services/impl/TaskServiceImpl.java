@@ -118,10 +118,12 @@ public class TaskServiceImpl implements Task {
         String assignee = task.getAssignee();
         if (null == assignee) {
             taskService.claim(taskId, uid);
+            return true;
         }
         if (!assignee.equals(uid)) {
             throw BasicException.build("task has been assigned");
         }
+
         return true;
     }
 
