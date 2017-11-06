@@ -100,7 +100,7 @@ public class Task implements Serializable {
      * @return
      */
     @RequestMapping(value = {"group/{groupId}/list", "group/list"}, method = RequestMethod.GET)
-    public ResponseDTO listCanSignTaskByGroup(@RequestParam(value = "page", required = false) String groupId
+    public ResponseDTO listCanSignTaskByGroup(@RequestParam(value = "groupId", required = false) String groupId
             , @PathVariable(value = "groupId", required = false) String groupId_Path
             , @RequestParam(value = "page", required = false, defaultValue = "0") int page
             , @RequestParam(value = "number", required = false, defaultValue = "50") int number) {
