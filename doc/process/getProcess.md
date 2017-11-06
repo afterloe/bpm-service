@@ -27,6 +27,21 @@ processId | Number | 流程id
 activeTaskId | Number | 当前活动任务id
 activeTaskInfo | Object | 活动任务详情
 
+activeTaskInfo
+
+参数名 | 类型 | 描述
+------ | ---- | ----
+id | Number | 任务id
+type | String | 任务类型 activeTask - 活动任务，historyTask - 历史任务
+name | String | 任务名字
+dueDate | String | 指定完成时间
+localVariables | Object | 任务数据集
+processVariables | Object | 流程数据集
+assignee | String | 签收人id
+owner | String | 任务归属人
+description | String | 任务描述
+createTime | String | 任务创建时间
+
 ### mock
 
 #### SOA Gateway
