@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/processdef">
+  <process id="MeetingOrRiverCruise" isExecutable="true">
+    <startEvent id="sid-A3A03271-8C31-4D53-813B-44B74A86ADB9"></startEvent>
+    <userTask id="sid-9C8E4EA4-46A4-4B8F-AA43-B1F017C3BF5A" name="河长办整理内容"></userTask>
+    <userTask id="sid-496EB452-1BA1-4056-A3E5-05691BFBDFE4" name="河长办通知开会"></userTask>
+    <userTask id="sid-95EABD29-1F86-425D-AFA5-917B380DE1B2" name="开会"></userTask>
+    <endEvent id="sid-53F1C875-DF0E-4A6D-BEC0-A7B6F27F89A0" name="结束"></endEvent>
+    <sequenceFlow id="sid-58217513-DFAA-4D89-9E05-5447B00FA59A" name="准备开会" sourceRef="sid-496EB452-1BA1-4056-A3E5-05691BFBDFE4" targetRef="sid-95EABD29-1F86-425D-AFA5-917B380DE1B2"></sequenceFlow>
+    <sequenceFlow id="sid-3D45E5A7-323F-4393-B515-FFD1EFB08620" name="公布通知" sourceRef="sid-9C8E4EA4-46A4-4B8F-AA43-B1F017C3BF5A" targetRef="sid-496EB452-1BA1-4056-A3E5-05691BFBDFE4"></sequenceFlow>
+    <userTask id="sid-3E0ED8D8-9A56-439E-B7FB-D9C960E71606" name="河长发起会议/巡河事件"></userTask>
+    <sequenceFlow id="sid-F9AF6E23-B8F9-4211-96E1-DBD7F9905570" sourceRef="sid-A3A03271-8C31-4D53-813B-44B74A86ADB9" targetRef="sid-3E0ED8D8-9A56-439E-B7FB-D9C960E71606"></sequenceFlow>
+    <sequenceFlow id="sid-1F0CB847-2C9F-485D-8784-BE84AA0F2127" name="等待开会" sourceRef="sid-3E0ED8D8-9A56-439E-B7FB-D9C960E71606" targetRef="sid-9C8E4EA4-46A4-4B8F-AA43-B1F017C3BF5A"></sequenceFlow>
+    <sequenceFlow id="sid-1B47A1AB-C16E-473C-9FE2-7CD731D828E6" name="确认开会" sourceRef="sid-95EABD29-1F86-425D-AFA5-917B380DE1B2" targetRef="sid-53F1C875-DF0E-4A6D-BEC0-A7B6F27F89A0"></sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_MeetingOrRiverCruise">
+    <bpmndi:BPMNPlane bpmnElement="MeetingOrRiverCruise" id="BPMNPlane_MeetingOrRiverCruise">
+      <bpmndi:BPMNShape bpmnElement="sid-A3A03271-8C31-4D53-813B-44B74A86ADB9" id="BPMNShape_sid-A3A03271-8C31-4D53-813B-44B74A86ADB9">
+        <omgdc:Bounds height="30.0" width="30.0" x="15.0" y="128.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="sid-9C8E4EA4-46A4-4B8F-AA43-B1F017C3BF5A" id="BPMNShape_sid-9C8E4EA4-46A4-4B8F-AA43-B1F017C3BF5A">
+        <omgdc:Bounds height="80.0" width="100.0" x="270.0" y="103.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="sid-496EB452-1BA1-4056-A3E5-05691BFBDFE4" id="BPMNShape_sid-496EB452-1BA1-4056-A3E5-05691BFBDFE4">
+        <omgdc:Bounds height="80.0" width="100.0" x="435.0" y="103.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="sid-95EABD29-1F86-425D-AFA5-917B380DE1B2" id="BPMNShape_sid-95EABD29-1F86-425D-AFA5-917B380DE1B2">
+        <omgdc:Bounds height="80.0" width="100.0" x="615.0" y="103.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="sid-53F1C875-DF0E-4A6D-BEC0-A7B6F27F89A0" id="BPMNShape_sid-53F1C875-DF0E-4A6D-BEC0-A7B6F27F89A0">
+        <omgdc:Bounds height="28.0" width="28.0" x="810.0" y="129.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="sid-3E0ED8D8-9A56-439E-B7FB-D9C960E71606" id="BPMNShape_sid-3E0ED8D8-9A56-439E-B7FB-D9C960E71606">
+        <omgdc:Bounds height="80.0" width="100.0" x="90.0" y="103.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="sid-1B47A1AB-C16E-473C-9FE2-7CD731D828E6" id="BPMNEdge_sid-1B47A1AB-C16E-473C-9FE2-7CD731D828E6">
+        <omgdi:waypoint x="715.0" y="143.0"></omgdi:waypoint>
+        <omgdi:waypoint x="810.0" y="143.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sid-1F0CB847-2C9F-485D-8784-BE84AA0F2127" id="BPMNEdge_sid-1F0CB847-2C9F-485D-8784-BE84AA0F2127">
+        <omgdi:waypoint x="190.0" y="143.0"></omgdi:waypoint>
+        <omgdi:waypoint x="270.0" y="143.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sid-58217513-DFAA-4D89-9E05-5447B00FA59A" id="BPMNEdge_sid-58217513-DFAA-4D89-9E05-5447B00FA59A">
+        <omgdi:waypoint x="535.0" y="143.0"></omgdi:waypoint>
+        <omgdi:waypoint x="615.0" y="143.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sid-3D45E5A7-323F-4393-B515-FFD1EFB08620" id="BPMNEdge_sid-3D45E5A7-323F-4393-B515-FFD1EFB08620">
+        <omgdi:waypoint x="370.0" y="143.0"></omgdi:waypoint>
+        <omgdi:waypoint x="435.0" y="143.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sid-F9AF6E23-B8F9-4211-96E1-DBD7F9905570" id="BPMNEdge_sid-F9AF6E23-B8F9-4211-96E1-DBD7F9905570">
+        <omgdi:waypoint x="45.0" y="143.0"></omgdi:waypoint>
+        <omgdi:waypoint x="90.0" y="143.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

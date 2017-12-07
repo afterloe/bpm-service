@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/processdef">
+  <process id="GovernanceEvent" isExecutable="true">
+    <startEvent id="sid-7A10A995-5B7D-4645-B87B-2580B80E4894" name="巡查端发起事件"></startEvent>
+    <userTask id="sid-600B37DD-DB75-4007-BA2A-B6C1B13DFEA6" name="整治人员手机端操作"></userTask>
+    <sequenceFlow id="sid-006484C6-FFC0-450C-B78A-9EC661D249B3" sourceRef="sid-7A10A995-5B7D-4645-B87B-2580B80E4894" targetRef="sid-600B37DD-DB75-4007-BA2A-B6C1B13DFEA6"></sequenceFlow>
+    <endEvent id="sid-54B68EEA-51BF-4F23-B36C-362B3E6D47A1" name="结束"></endEvent>
+    <userTask id="sid-1EED1DAB-9772-43E7-9944-41B1EA39F35E" name="整治人员整治"></userTask>
+    <sequenceFlow id="sid-DB6E6A6E-E542-4196-B88D-C2EE8D122711" name="进行整治" sourceRef="sid-600B37DD-DB75-4007-BA2A-B6C1B13DFEA6" targetRef="sid-1EED1DAB-9772-43E7-9944-41B1EA39F35E"></sequenceFlow>
+    <userTask id="sid-45E66116-96AF-459F-8E88-AFD742F46910" name="整治人员手机端确认已整治"></userTask>
+    <sequenceFlow id="sid-8EAEE43A-0EEA-4549-BF77-BD963238D108" name="整治完成" sourceRef="sid-1EED1DAB-9772-43E7-9944-41B1EA39F35E" targetRef="sid-45E66116-96AF-459F-8E88-AFD742F46910"></sequenceFlow>
+    <sequenceFlow id="sid-47BC7BDB-E205-4A81-8064-B75124E8DBF8" sourceRef="sid-45E66116-96AF-459F-8E88-AFD742F46910" targetRef="sid-54B68EEA-51BF-4F23-B36C-362B3E6D47A1"></sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_GovernanceEvent">
+    <bpmndi:BPMNPlane bpmnElement="GovernanceEvent" id="BPMNPlane_GovernanceEvent">
+      <bpmndi:BPMNShape bpmnElement="sid-7A10A995-5B7D-4645-B87B-2580B80E4894" id="BPMNShape_sid-7A10A995-5B7D-4645-B87B-2580B80E4894">
+        <omgdc:Bounds height="30.0" width="30.0" x="120.0" y="105.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="sid-600B37DD-DB75-4007-BA2A-B6C1B13DFEA6" id="BPMNShape_sid-600B37DD-DB75-4007-BA2A-B6C1B13DFEA6">
+        <omgdc:Bounds height="80.0" width="100.0" x="240.0" y="80.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="sid-54B68EEA-51BF-4F23-B36C-362B3E6D47A1" id="BPMNShape_sid-54B68EEA-51BF-4F23-B36C-362B3E6D47A1">
+        <omgdc:Bounds height="28.0" width="28.0" x="765.0" y="106.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="sid-1EED1DAB-9772-43E7-9944-41B1EA39F35E" id="BPMNShape_sid-1EED1DAB-9772-43E7-9944-41B1EA39F35E">
+        <omgdc:Bounds height="80.0" width="100.0" x="420.0" y="80.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="sid-45E66116-96AF-459F-8E88-AFD742F46910" id="BPMNShape_sid-45E66116-96AF-459F-8E88-AFD742F46910">
+        <omgdc:Bounds height="80.0" width="100.0" x="600.0" y="80.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="sid-006484C6-FFC0-450C-B78A-9EC661D249B3" id="BPMNEdge_sid-006484C6-FFC0-450C-B78A-9EC661D249B3">
+        <omgdi:waypoint x="150.0" y="120.0"></omgdi:waypoint>
+        <omgdi:waypoint x="240.0" y="120.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sid-DB6E6A6E-E542-4196-B88D-C2EE8D122711" id="BPMNEdge_sid-DB6E6A6E-E542-4196-B88D-C2EE8D122711">
+        <omgdi:waypoint x="340.0" y="120.0"></omgdi:waypoint>
+        <omgdi:waypoint x="420.0" y="120.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sid-8EAEE43A-0EEA-4549-BF77-BD963238D108" id="BPMNEdge_sid-8EAEE43A-0EEA-4549-BF77-BD963238D108">
+        <omgdi:waypoint x="520.0" y="120.0"></omgdi:waypoint>
+        <omgdi:waypoint x="600.0" y="120.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sid-47BC7BDB-E205-4A81-8064-B75124E8DBF8" id="BPMNEdge_sid-47BC7BDB-E205-4A81-8064-B75124E8DBF8">
+        <omgdi:waypoint x="700.0" y="120.0"></omgdi:waypoint>
+        <omgdi:waypoint x="765.0" y="120.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>
