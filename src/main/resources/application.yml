@@ -1,5 +1,5 @@
 datasource:
-  ip: "172.30.128.4"
+  ip: "172.20.128.4"
   port: 5432
   name: "centos"
 
@@ -68,4 +68,4 @@ eureka:
     healthcheck:
       enable: true
     serviceUrl:
-      defaultZone: http://${developer.name}:${developer.password}@172.30.192.1:8761/eureka/,http://${developer.name}:${developer.password}@172.30.193.1:8761/eureka/,http://${developer.name}:${developer.password}@172.30.194.1:8761/eureka/
+      defaultZone: http://${developer.name}:${developer.password}@172.20.192.1:8761/eureka/,http://${developer.name}:${developer.password}@172.20.193.1:8761/eureka/,http://${developer.name}:${developer.password}@172.20.194.1:8761/eureka/
